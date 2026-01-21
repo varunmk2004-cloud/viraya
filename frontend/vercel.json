@@ -1,0 +1,18 @@
+{
+  "builds": [
+    { 
+      "src": "index.html", 
+      "use": "@vercel/static-build", 
+      "config": { 
+        "distDir": "dist",
+        "buildCommand": "npm run build"
+      } 
+    }
+  ],
+  "redirects": [
+    { "source": "/favicon.ico", "destination": "/favicon.svg", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

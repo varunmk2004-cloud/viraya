@@ -45,7 +45,7 @@ export default function Navbar() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0.75rem 0' }}>
           <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 0, textDecoration: 'none' }}>
             <div style={{ width: 'clamp(40px, 10vw, 56px)', height: 'clamp(40px, 10vw, 56px)', borderRadius: '0.375rem', overflow: 'hidden', boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)' }}>
-              <img src="/logo.svg" alt="Viraya Productions logo" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+              <img src="/logo-bg.png" alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
             </div>
           </Link>
           

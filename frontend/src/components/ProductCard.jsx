@@ -16,7 +16,7 @@ export default function ProductCard({ p }) {
             <img
               src={p.image || (p.images && p.images[0])}
               alt={p.title}
-              style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s' }}
+              style={{ width: '100%', height: 'clamp(160px, 28vh, 200px)', objectFit: 'cover', transition: 'transform 0.3s' }}
               className="card-img-hover"
             />
           ) : (

@@ -52,8 +52,8 @@ export default function Home() {
         className="mb-4 text-white position-relative overflow-hidden slow-motion"
         style={{
           background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%)',
-          padding: '40px 40px',
-          minHeight: '300px',
+          padding: 'clamp(24px, 5vw, 40px)',
+          minHeight: 'clamp(220px, 38vh, 300px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

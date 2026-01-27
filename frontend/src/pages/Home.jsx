@@ -110,19 +110,19 @@ export default function Home() {
       </div>
 
       {/* Promotional Banners */}
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', flexWrap: 'nowrap', width: '100%' }}>
-        <div style={{ flex: '1 1 33.333%', minWidth: 0 }}>
+      <div className="row g-3 mb-4" style={{ marginLeft: 0, marginRight: 0 }}>
+        <div className="col-12 col-md-4">
           <div 
             className="rounded position-relative overflow-hidden animate-fade-in-up"
             style={{
               background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-              height: '140px',
+              minHeight: '120px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
-              padding: '1.5rem',
+              padding: '1rem',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-5px)';
@@ -135,18 +135,11 @@ export default function Home() {
             onClick={() => window.location.href = '/about'}
           >
             <div className="d-flex align-items-center gap-3" style={{ width: '100%' }}>
-              <div
-                className="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                style={{
-                  width: '60px',
-                  height: '60px',
-                  background: 'rgba(26, 26, 26, 0.2)',
-                }}
-              >
+              <div className="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style={{ width: '50px', height: '50px', background: 'rgba(26, 26, 26, 0.2)' }}>
                 <FiPercent size={28} style={{ color: '#1a1a1a' }} />
               </div>
               <div style={{ flex: 1 }}>
-                <h5 className="fw-bold mb-1" style={{ fontFamily: "'Playfair Display', serif", color: '#1a1a1a', fontSize: '1.1rem', margin: 0 }}>
+                <h5 className="fw-bold mb-1" style={{ fontFamily: "'Playfair Display', serif", color: '#1a1a1a', fontSize: '1rem', margin: 0 }}>
                   New Customer Offer
                 </h5>
                 <p className="mb-0 small" style={{ color: '#1a1a1a', opacity: 0.8, margin: 0 }}>
@@ -156,19 +149,19 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div style={{ flex: '1 1 33.333%', minWidth: 0 }}>
+        <div className="col-12 col-md-4">
           <div 
             className="rounded position-relative overflow-hidden animate-fade-in-up"
             style={{
               background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
-              height: '140px',
+              minHeight: '120px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
               border: '2px solid rgba(212, 175, 55, 0.3)',
-              padding: '1.5rem',
+              padding: '1rem',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-5px)';
@@ -183,18 +176,11 @@ export default function Home() {
             onClick={() => window.location.href = '/about'}
           >
             <div className="d-flex align-items-center gap-3" style={{ width: '100%' }}>
-              <div
-                className="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                style={{
-                  width: '60px',
-                  height: '60px',
-                  background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                }}
-              >
+              <div className="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style={{ width: '50px', height: '50px', background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)' }}>
                 <FiGift size={28} style={{ color: '#1a1a1a' }} />
               </div>
               <div style={{ flex: 1 }}>
-                <h5 className="fw-bold mb-1" style={{ fontFamily: "'Playfair Display', serif", color: '#ffffff', fontSize: '1.1rem', margin: 0 }}>
+                <h5 className="fw-bold mb-1" style={{ fontFamily: "'Playfair Display', serif", color: '#ffffff', fontSize: '1rem', margin: 0 }}>
                   Referral Bonus
                 </h5>
                 <p className="mb-0 small" style={{ color: '#f4e4bc', opacity: 0.9, margin: 0 }}>
@@ -204,18 +190,18 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div style={{ flex: '1 1 33.333%', minWidth: 0 }}>
+        <div className="col-12 col-md-4">
           <div 
             className="rounded position-relative overflow-hidden animate-fade-in-up"
             style={{
               background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-              height: '140px',
+              minHeight: '120px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
-              padding: '1.5rem',
+              padding: '1rem',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-5px)';
@@ -228,18 +214,11 @@ export default function Home() {
             onClick={() => window.location.href = '/about'}
           >
             <div className="d-flex align-items-center gap-3" style={{ width: '100%' }}>
-              <div
-                className="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                style={{
-                  width: '60px',
-                  height: '60px',
-                  background: 'rgba(26, 26, 26, 0.2)',
-                }}
-              >
+              <div className="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style={{ width: '50px', height: '50px', background: 'rgba(26, 26, 26, 0.2)' }}>
                 <FiTrendingUp size={28} style={{ color: '#1a1a1a' }} />
               </div>
               <div style={{ flex: 1 }}>
-                <h5 className="fw-bold mb-1" style={{ fontFamily: "'Playfair Display', serif", color: '#1a1a1a', fontSize: '1.1rem', margin: 0 }}>
+                <h5 className="fw-bold mb-1" style={{ fontFamily: "'Playfair Display', serif", color: '#1a1a1a', fontSize: '1rem', margin: 0 }}>
                   Early Bird Special
                 </h5>
                 <p className="mb-0 small" style={{ color: '#1a1a1a', opacity: 0.8, margin: 0 }}>

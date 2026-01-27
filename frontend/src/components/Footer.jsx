@@ -53,10 +53,10 @@ export default function Footer() {
 
         <hr style={{ margin: '1.5rem 0' }} />
 
-        <div className="d-flex flex-column" style={{ flexDirection: 'column', gap: '0.5rem', paddingBottom: '1rem' }}>
-          <div style={{ display: 'flex', flexDirection: window.innerWidth >= 768 ? 'row' : 'column', justifyContent: 'space-between', alignItems: 'center', color: '#6c757d', fontSize: '0.875rem' }}>
-            <span>© {new Date().getFullYear()} Viraya Productions. All rights reserved.</span>
-            <div className="d-flex gap-3 align-items-center" style={{ marginTop: window.innerWidth >= 768 ? 0 : '0.5rem', flexWrap: 'wrap' }}>
+        <div className="d-flex flex-column" style={{ gap: '0.5rem', paddingBottom: '1rem' }}>
+          <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center" style={{ color: '#6c757d', fontSize: '0.875rem' }}>
+            <span className="mb-2 mb-md-0">© {new Date().getFullYear()} Viraya Productions. All rights reserved.</span>
+            <div className="d-flex gap-3 align-items-center flex-wrap mt-2 mt-md-0">
               <Link to="/privacy" className="text-decoration-none text-muted">Privacy</Link>
               <Link to="/terms" className="text-decoration-none text-muted">Terms</Link>
               <Link to="/support" className="text-decoration-none text-muted">Support</Link>

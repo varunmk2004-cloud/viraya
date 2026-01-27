@@ -43,33 +43,10 @@ export default function Navbar() {
     >
       <div className="container">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0.75rem 0' }}>
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none', fontWeight: 700 }}>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: '0.375rem',
-                width: '50px',
-                height: '50px',
-                background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                color: '#1a1a1a',
-                fontSize: '1.5rem',
-                fontFamily: "'Playfair Display', serif",
-                fontWeight: 700,
-                boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)',
-              }}
-            >
-              V
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 0, textDecoration: 'none' }}>
+            <div style={{ width: 'clamp(40px, 10vw, 56px)', height: 'clamp(40px, 10vw, 56px)', borderRadius: '0.375rem', overflow: 'hidden', boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)' }}>
+              <img src="/logo.svg" alt="Viraya Productions logo" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
             </div>
-            <span style={{ 
-              fontFamily: "'Playfair Display', serif",
-              fontSize: '1.5rem',
-              color: '#1a1a1a',
-              letterSpacing: '0.1em'
-            }}>
-              Viraya Productions
-            </span>
           </Link>
           
           {/* Desktop Menu */}

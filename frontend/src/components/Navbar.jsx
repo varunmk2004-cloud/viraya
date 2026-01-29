@@ -26,16 +26,13 @@ export default function Navbar() {
     <nav 
       className="navbar"
       style={{ 
-        position: 'fixed',
+        position: 'relative',
         zIndex: 1000,
         background: 'rgba(255, 255, 255, 0.98)',
         backdropFilter: 'blur(12px) saturate(180%)',
         WebkitBackdropFilter: 'blur(12px) saturate(180%)',
         borderBottom: '1px solid rgba(212, 175, 55, 0.15)',
         boxShadow: '0 1px 15px rgba(26, 26, 26, 0.04)',
-        top: 0,
-        left: 0,
-        right: 0,
         width: '100%',
         marginTop: 0,
         paddingTop: 0
@@ -44,8 +41,8 @@ export default function Navbar() {
       <div className="container">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0.75rem 0' }}>
           <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 0, textDecoration: 'none' }}>
-            <div style={{ width: 'clamp(40px, 10vw, 56px)', height: 'clamp(40px, 10vw, 56px)', borderRadius: '0.375rem', overflow: 'hidden', boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)' }}>
-              <img src="/logo-bg.png" alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+            <div style={{ width: 'clamp(100px, 20vw, 200px)', height: 'auto', display: 'flex', alignItems: 'center' }}>
+              <img src="/logo-bg.png" alt="Viraya Productions" style={{ width: '100%', height: 'auto', objectFit: 'contain', display: 'block' }} />
             </div>
           </Link>
           

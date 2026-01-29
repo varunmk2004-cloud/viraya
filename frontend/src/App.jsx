@@ -24,7 +24,7 @@ export default function App() {
       <ToastProvider>
         <div className="min-vh-100 luxury-bg" style={{ position: 'relative', marginTop: 0, paddingTop: 0 }}>
           <Navbar />
-          <main style={{ paddingTop: '70px' }}>
+          <main>
             <div className="container" style={{ position: 'relative', zIndex: 1, paddingTop: '0.5rem', paddingBottom: '1rem' }}>
               <Routes>
                 <Route path="/" element={<Home />} />

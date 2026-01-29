@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiMail, FiPhone, FiMapPin } from 'react-icons/fi';
+import { FiMail, FiPhone, FiMapPin, FiInstagram } from 'react-icons/fi';
 
 export default function Footer() {
   return (
@@ -40,10 +40,13 @@ export default function Footer() {
               Get in Touch
             </div>
             <div className="d-flex align-items-start gap-2 text-muted mb-2">
-              <FiMail style={{ marginTop: '0.25rem' }} /> <span>support@virayaproductions.com</span>
+              <FiMail style={{ marginTop: '0.25rem' }} /> <span>thevirayaproductionspvtltd@gmail.com</span>
             </div>
             <div className="d-flex align-items-start gap-2 text-muted mb-2">
-              <FiPhone style={{ marginTop: '0.25rem' }} /> <span>+1 (555) 123-4567</span>
+              <FiPhone style={{ marginTop: '0.25rem' }} /> <span>+919113869169</span>
+            </div>
+            <div className="d-flex align-items-start gap-2 text-muted mb-2">
+              <FiInstagram style={{ marginTop: '0.25rem' }} /> <span>@viraya_production</span>
             </div>
             <div className="d-flex align-items-start gap-2 text-muted">
               <FiMapPin style={{ marginTop: '0.25rem' }} /> <span>APMC Market, Amargol, Hubballi, Karnataka</span>

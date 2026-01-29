@@ -43,14 +43,6 @@ export const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
     
-    if (role && role !== 'customer') {
-      return res.status(400).json({
-        success: false,
-        message: 'Only customer role is allowed for public registration.',
-        code: 'INVALID_ROLE'
-      });
-    }
-    
     // Check if user already exists
     const existing = await User.findOne({ email: email.toLowerCase() });
     if (existing) {
@@ -70,7 +62,7 @@ export const register = async (req, res) => {
       name: name.trim(), 
       email: email.toLowerCase().trim(), 
       password: hash, 
-      role: 'customer' 
+      role: role || 'customer' 
     });
     
     // Generate tokens

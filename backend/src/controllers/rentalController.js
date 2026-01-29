@@ -1,6 +1,5 @@
 import Rental from '../models/Rental.js';
 import Product from '../models/Product.js';
-import Order from '../models/Order.js';
 
 const isAvailable = async (productId, startDate, endDate) => {
   const overlapping = await Rental.findOne({
@@ -25,35 +24,8 @@ export const requestRental = async (req, res) => {
   const days = Math.ceil((ed - sd) / (1000*60*60*24)) + 1;
   const total = (product.rental.pricePerDay || 0) * days;
   const deposit = product.rental.deposit || 0;
-  const rental = await Rental.create({
-    renter: req.user._id,
-    product: productId,
-    startDate: sd,
-    endDate: ed,
-    totalAmount: total,
-    deposit,
-    status: 'requested',
-    paymentInfo: { method: 'dummy', paid: true }
-  });
-
-  const order = await Order.create({
-    buyer: req.user._id,
-    items: [
-      {
-        product: productId,
-        qty: 1,
-        price: total,
-        type: 'rental',
-        rentalStart: sd,
-        rentalEnd: ed
-      }
-    ],
-    total,
-    paymentStatus: 'paid',
-    paymentInfo: { method: 'rental_request' }
-  });
-
-  res.json({ rental, order });
+  const rental = await Rental.create({ renter: req.user._id, product: productId, startDate: sd, endDate: ed, totalAmount: total, deposit, status: 'requested', paymentInfo: { method: 'dummy', paid: true } });
+  res.json(rental);
 };
 
 export const sellerRentalRequests = async (req, res) => {

@@ -5,7 +5,6 @@ import Product from '../models/Product.js';
 // Dummy payment: accept instantly
 export const checkout = async (req, res) => {
   try {
-    const { name, email, phone, address, city, zipCode, paymentMethod } = req.body || {};
     const cart = await Cart.findOne({ user: req.user._id }).populate('items.product');
     if (!cart || cart.items.length === 0) {
       return res.status(400).json({ message: 'Cart is empty' });
@@ -37,15 +36,7 @@ export const checkout = async (req, res) => {
       items,
       total,
       paymentStatus: 'paid',
-      paymentInfo: { method: paymentMethod || 'dummy' },
-      shippingAddress: {
-        name,
-        email,
-        phone,
-        address,
-        city,
-        zipCode
-      }
+      paymentInfo: { method: 'dummy' }
     });
     
     // Reduce stock for purchased items

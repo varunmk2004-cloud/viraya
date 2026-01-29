@@ -37,7 +37,7 @@ export const validateRegister = [
   
   body('role')
     .optional()
-    .isIn(['customer']).withMessage('Invalid role specified'),
+    .isIn(['customer', 'seller', 'admin']).withMessage('Invalid role specified'),
   
   handleValidationErrors
 ];

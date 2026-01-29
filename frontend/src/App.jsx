@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './components/Toast';
 import Navbar from './components/Navbar';
@@ -17,18 +17,15 @@ import AboutUs from './pages/AboutUs';
 import MyOrders from './pages/MyOrders';
 import PrivateRoute from './components/PrivateRoute';
 import AdminRoute from './components/AdminRoute';
-// Delivery feature removed for simplicity
 
 export default function App() {
-  const location = useLocation();
-  const isAdminPage = location.pathname.startsWith('/admin') && location.pathname !== '/admin/login';
   return (
     <AuthProvider>
       <ToastProvider>
         <div className="min-vh-100 luxury-bg" style={{ position: 'relative', marginTop: 0, paddingTop: 0 }}>
-          {!isAdminPage && <Navbar />}
-          <main style={{ paddingTop: isAdminPage ? '0px' : '70px' }}>
-            <div className="container" style={{ position: 'relative', paddingTop: '0.5rem', paddingBottom: '1rem' }}>
+          <Navbar />
+          <main style={{ paddingTop: '70px' }}>
+            <div className="container" style={{ position: 'relative', zIndex: 1, paddingTop: '0.5rem', paddingBottom: '1rem' }}>
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/product/:id" element={<ProductDetail />} />
@@ -70,7 +67,6 @@ export default function App() {
                     </AdminRoute>
                   }
                 />
-                {/* Delivery route removed */}
               </Routes>
             </div>
           </main>

@@ -4,7 +4,6 @@ import { isAdmin } from '../middleware/roles.js';
 import User from '../models/User.js';
 import Product from '../models/Product.js';
 import Order from '../models/Order.js';
-import Rental from '../models/Rental.js';
 
 const r = express.Router();
 r.use(protect, isAdmin);
@@ -51,8 +50,6 @@ r.delete('/users', async (req, res) => {
   }
 });
 
-// Delivery staff creation removed
-
 // Products
 r.get('/products', async (req, res) => {
   try {
@@ -94,68 +91,8 @@ r.delete('/products/:id', async (req, res) => {
 // Orders
 r.get('/orders', async (req, res) => {
   try {
-    const orders = await Order.find()
-      .populate('buyer', 'name email')
-      .populate('items.product');
+    const orders = await Order.find().populate('buyer', 'name email').populate('items.product');
     res.json(orders);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// Update order approval status
-r.put('/orders/:id/status', async (req, res) => {
-  try {
-    const { status } = req.body;
-    if (!['pending', 'approved', 'rejected'].includes(status)) {
-      return res.status(400).json({ message: 'Invalid status value' });
-    }
-    const order = await Order.findByIdAndUpdate(
-      req.params.id,
-      { status },
-      { new: true, runValidators: true }
-    ).populate('buyer', 'name email').populate('items.product');
-    if (!order) return res.status(404).json({ message: 'Order not found' });
-    res.json(order);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// Update delivery address for an order
-r.put('/orders/:id/address', async (req, res) => {
-  try {
-    const { name, email, phone, address, city, zipCode } = req.body || {};
-    const shippingAddress = { name, email, phone, address, city, zipCode };
-    const order = await Order.findByIdAndUpdate(
-      req.params.id,
-      { shippingAddress },
-      { new: true, runValidators: true }
-    ).populate('buyer', 'name email').populate('items.product');
-    if (!order) return res.status(404).json({ message: 'Order not found' });
-    res.json(order);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// Delivery assignment removed
-
-// Update rental request status (admin)
-r.put('/rentals/:id/status', async (req, res) => {
-  try {
-    const { status } = req.body;
-    const allowed = ['requested','approved','rejected','ongoing','returned'];
-    if (!allowed.includes(status)) {
-      return res.status(400).json({ message: 'Invalid status value' });
-    }
-    const rental = await Rental.findByIdAndUpdate(
-      req.params.id,
-      { status },
-      { new: true, runValidators: true }
-    ).populate('product renter');
-    if (!rental) return res.status(404).json({ message: 'Rental not found' });
-    res.json(rental);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

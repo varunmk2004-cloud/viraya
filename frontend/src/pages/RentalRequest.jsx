@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+const text = encodeURIComponent(lines.join('\n'));
+const phone = '7483425793';
+window.open(`https://wa.me/${phone}?text=${text}`, '_blank');import React, { useState, useEffect, useContext } from 'react';
 import axios from '../api/axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useToast } from '../components/Toast';
@@ -83,7 +85,7 @@ export default function RentalRequest() {
     ].filter(Boolean);
 
     const text = encodeURIComponent(lines.join('\n'));
-    const phone = '7483425793';
+    const phone = '919480009349';
     window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
   };
 

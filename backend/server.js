@@ -74,7 +74,6 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/rentals', rentalRoutes);
 app.use('/api/admin', adminRoutes);
-// Delivery API removed for simplicity
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => {

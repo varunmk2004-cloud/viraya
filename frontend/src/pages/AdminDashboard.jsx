@@ -1,34 +1,19 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from '../api/axios';
 import { useToast } from '../components/Toast';
 import Loading from '../components/Loading';
-import { FiUsers, FiPackage, FiDollarSign, FiTrendingUp, FiShield, FiEdit, FiTrash2, FiPlus, FiShoppingBag, FiSave, FiX, FiMapPin, FiHome, FiLogOut } from 'react-icons/fi';
-import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import { FiUsers, FiPackage, FiDollarSign, FiTrendingUp, FiShield, FiEdit, FiTrash2, FiPlus, FiShoppingBag, FiSave, FiX } from 'react-icons/fi';
 
 export default function AdminDashboard() {
-  const { logout } = useContext(AuthContext);
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [rentals, setRentals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showProductModal, setShowProductModal] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [editingUser, setEditingUser] = useState(null);
-  const [showAddressModal, setShowAddressModal] = useState(false);
-  const [editingOrder, setEditingOrder] = useState(null);
-  const [addressForm, setAddressForm] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    address: '',
-    city: '',
-    zipCode: ''
-  });
   const [productForm, setProductForm] = useState({
     title: '',
     description: '',
@@ -48,16 +33,14 @@ export default function AdminDashboard() {
   const loadData = async () => {
     setLoading(true);
     try {
-      const [usersRes, productsRes, ordersRes, rentalsRes] = await Promise.all([
+      const [usersRes, productsRes, ordersRes] = await Promise.all([
         axios.get('/admin/users'),
         axios.get('/admin/products'),
         axios.get('/admin/orders'),
-        axios.get('/rentals'),
       ]);
       setUsers(usersRes.data);
       setProducts(productsRes.data);
       setOrders(ordersRes.data);
-      setRentals(rentalsRes.data);
     } catch (err) {
       showToast('Failed to load dashboard data', 'error');
     } finally {
@@ -127,11 +110,6 @@ export default function AdminDashboard() {
     setShowUserModal(true);
   };
 
-  const handleTopLogout = () => {
-    logout();
-    navigate('/');
-  };
-
   const handleUpdateUser = async (e) => {
     e.preventDefault();
     try {
@@ -153,80 +131,6 @@ export default function AdminDashboard() {
       loadData();
     } catch (err) {
       showToast('Failed to delete user', 'error');
-    }
-  };
-
-  const handleApproveOrder = async (orderId) => {
-    try {
-      const res = await axios.put(`/admin/orders/${orderId}/status`, { status: 'approved' });
-      showToast('Order approved', 'success');
-      setOrders((prev) => prev.map((o) => (o._id === orderId ? res.data : o)));
-    } catch (err) {
-      showToast(err.response?.data?.message || 'Failed to approve order', 'error');
-    }
-  };
-
-  const handleRejectOrder = async (orderId) => {
-    try {
-      const res = await axios.put(`/admin/orders/${orderId}/status`, { status: 'rejected' });
-      showToast('Order rejected', 'success');
-      setOrders((prev) => prev.map((o) => (o._id === orderId ? res.data : o)));
-    } catch (err) {
-      showToast(err.response?.data?.message || 'Failed to reject order', 'error');
-    }
-  };
-
-  const openAddressModal = (order) => {
-    setEditingOrder(order);
-    setAddressForm({
-      name: order.shippingAddress?.name || order.buyer?.name || '',
-      email: order.shippingAddress?.email || order.buyer?.email || '',
-      phone: order.shippingAddress?.phone || '',
-      address: order.shippingAddress?.address || '',
-      city: order.shippingAddress?.city || '',
-      zipCode: order.shippingAddress?.zipCode || ''
-    });
-    setShowAddressModal(true);
-  };
-
-  const handleAddressSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.put(`/admin/orders/${editingOrder._id}/address`, addressForm);
-      showToast('Delivery address updated', 'success');
-      setOrders((prev) => prev.map((o) => (o._id === editingOrder._id ? res.data : o)));
-      setShowAddressModal(false);
-      setEditingOrder(null);
-    } catch (err) {
-      showToast(err.response?.data?.message || 'Failed to update address', 'error');
-    }
-  };
-
-  const openAssignModal = (order) => {
-    setEditingOrder(order);
-    setAssignForm({
-      deliveryUserId: order.deliveryAssignedTo?._id || '',
-      deliveryDate: order.deliveryDate ? new Date(order.deliveryDate).toISOString().slice(0,16) : '',
-      locationUrl: order.deliveryLocationUrl || ''
-    });
-    setShowAssignModal(true);
-  };
-
-  const handleAssignSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const payload = {
-        deliveryUserId: assignForm.deliveryUserId,
-        deliveryDate: assignForm.deliveryDate,
-        locationUrl: assignForm.locationUrl
-      };
-      const res = await axios.put(`/admin/orders/${editingOrder._id}/assign-delivery`, payload);
-      showToast('Delivery assignment updated', 'success');
-      setOrders((prev) => prev.map((o) => (o._id === editingOrder._id ? res.data : o)));
-      setShowAssignModal(false);
-      setEditingOrder(null);
-    } catch (err) {
-      showToast(err.response?.data?.message || 'Failed to assign delivery', 'error');
     }
   };
 
@@ -290,22 +194,6 @@ export default function AdminDashboard() {
             <p className="text-muted mb-0">Manage your platform</p>
           </div>
         </div>
-        <div className="d-flex align-items-center gap-2">
-          <Link 
-            to="/" 
-            className="btn btn-outline-secondary"
-            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-          >
-            <FiHome /> Home
-          </Link>
-          <button 
-            className="btn btn-outline-danger"
-            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-            onClick={handleTopLogout}
-          >
-            <FiLogOut /> Logout
-          </button>
-        </div>
       </div>
 
       <div className="mb-4">
@@ -333,12 +221,6 @@ export default function AdminDashboard() {
             onClick={() => setActiveTab('orders')}
           >
             Orders
-          </button>
-          <button
-            className={`nav-link ${activeTab === 'rentals' ? 'active' : ''}`}
-            onClick={() => setActiveTab('rentals')}
-          >
-            Rentals
           </button>
         </div>
       </div>
@@ -555,7 +437,6 @@ export default function AdminDashboard() {
           <h3 className="h4 fw-bold mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>User Management</h3>
           <div className="card shadow-sm" style={{ border: '1px solid rgba(212, 175, 55, 0.2)' }}>
             <div style={{ padding: '1rem' }}>
-              {/* Delivery staff creation removed */}
               <div className="table-responsive">
                 <table className="table table-hover">
                   <thead>
@@ -614,8 +495,6 @@ export default function AdminDashboard() {
         </>
       )}
 
-      {/* Delivery staff modal removed */}
-
       {activeTab === 'orders' && (
         <>
           <h3 className="h4 fw-bold mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>Order Management</h3>
@@ -629,10 +508,7 @@ export default function AdminDashboard() {
                       <th>Customer</th>
                       <th>Items</th>
                       <th>Total</th>
-                      <th>Payment</th>
-                      <th>Order Status</th>
-                      {/* Delivery column removed */}
-                      <th>Actions</th>
+                      <th>Status</th>
                       <th>Date</th>
                     </tr>
                   </thead>
@@ -663,35 +539,6 @@ export default function AdminDashboard() {
                             {order.paymentStatus}
                           </span>
                         </td>
-                        <td>
-                          <span className={`badge ${order.status === 'approved' ? 'bg-success' : order.status === 'rejected' ? 'bg-danger' : 'bg-secondary'}`}>
-                            {order.status || 'pending'}
-                          </span>
-                        </td>
-                        {/* Delivery details removed */}
-                        <td>
-                          <button
-                            className="btn btn-outline-success btn-sm me-2"
-                            onClick={() => handleApproveOrder(order._id)}
-                            disabled={order.status === 'approved'}
-                          >
-                            Approve
-                          </button>
-                          <button
-                            className="btn btn-outline-danger btn-sm me-2"
-                            onClick={() => handleRejectOrder(order._id)}
-                            disabled={order.status === 'rejected'}
-                          >
-                            Reject
-                          </button>
-                          <button
-                            className="btn btn-outline-primary btn-sm"
-                            onClick={() => openAddressModal(order)}
-                          >
-                            <FiMapPin /> Set Address
-                          </button>
-                          {/* Assign Delivery removed */}
-                        </td>
                         <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                       </tr>
                     ))}
@@ -700,92 +547,6 @@ export default function AdminDashboard() {
               </div>
               {orders.length === 0 && (
                 <p className="text-center text-muted py-5">No orders found</p>
-              )}
-            </div>
-          </div>
-        </>
-      )}
-
-      {activeTab === 'rentals' && (
-        <>
-          <h3 className="h4 fw-bold mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>Rental Requests</h3>
-          <div className="card shadow-sm" style={{ border: '1px solid rgba(212, 175, 55, 0.2)' }}>
-            <div style={{ padding: '1rem' }}>
-              <div className="table-responsive">
-                <table className="table table-hover">
-                  <thead>
-                    <tr>
-                      <th>Request ID</th>
-                      <th>Customer</th>
-                      <th>Product</th>
-                      <th>Dates</th>
-                      <th>Total</th>
-                      <th>Status</th>
-                      <th>Created</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {rentals.map((rental) => (
-                      <tr key={rental._id}>
-                        <td className="fw-medium">#{rental._id.slice(-6)}</td>
-                        <td>
-                          {rental.renter?.name || 'N/A'}
-                          <div className="text-muted small">{rental.renter?.email}</div>
-                        </td>
-                        <td>{rental.product?.title || 'Product'}</td>
-                        <td>
-                          <div className="small">
-                            <div>{rental.startDate ? new Date(rental.startDate).toLocaleDateString() : '-'}</div>
-                            <div className="text-muted">to {rental.endDate ? new Date(rental.endDate).toLocaleDateString() : '-'}</div>
-                          </div>
-                        </td>
-                        <td className="fw-semibold">₹{(rental.totalAmount || 0).toLocaleString()}</td>
-                        <td>
-                          <span className="badge bg-info text-dark text-capitalize">
-                            {rental.status || 'requested'}
-                          </span>
-                        </td>
-                        <td>{rental.createdAt ? new Date(rental.createdAt).toLocaleDateString() : '-'}</td>
-                        <td>
-                          <button
-                            className="btn btn-outline-success btn-sm me-2"
-                            onClick={async () => {
-                              try {
-                                const res = await axios.put(`/admin/rentals/${rental._id}/status`, { status: 'approved' });
-                                showToast('Rental approved', 'success');
-                                setRentals((prev) => prev.map((r) => (r._id === rental._id ? res.data : r)));
-                              } catch (err) {
-                                showToast(err.response?.data?.message || 'Failed to approve rental', 'error');
-                              }
-                            }}
-                            disabled={rental.status === 'approved'}
-                          >
-                            Approve
-                          </button>
-                          <button
-                            className="btn btn-outline-danger btn-sm"
-                            onClick={async () => {
-                              try {
-                                const res = await axios.put(`/admin/rentals/${rental._id}/status`, { status: 'rejected' });
-                                showToast('Rental rejected', 'success');
-                                setRentals((prev) => prev.map((r) => (r._id === rental._id ? res.data : r)));
-                              } catch (err) {
-                                showToast(err.response?.data?.message || 'Failed to reject rental', 'error');
-                              }
-                            }}
-                            disabled={rental.status === 'rejected'}
-                          >
-                            Reject
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              {rentals.length === 0 && (
-                <p className="text-center text-muted py-5">No rental requests found</p>
               )}
             </div>
           </div>
@@ -995,7 +756,6 @@ export default function AdminDashboard() {
                       <option value="customer">Customer</option>
                       <option value="seller">Seller</option>
                       <option value="admin">Admin</option>
-                      <option value="delivery">Delivery</option>
                     </select>
                   </div>
                 </div>
@@ -1015,108 +775,6 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
-
-      {/* Address Modal */}
-      {showAddressModal && (
-        <div className="modal show" style={{ display: 'block', position: 'fixed', inset: 0 }}>
-          <div className="modal-backdrop show" style={{ position: 'fixed', inset: 0, zIndex: 1990 }} onClick={() => {
-            setShowAddressModal(false);
-            setEditingOrder(null);
-          }}></div>
-          <div className="modal-dialog" style={{ position: 'relative', zIndex: 2100 }}>
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Set Delivery Address</h5>
-                <button type="button" className="btn-close" onClick={() => {
-                  setShowAddressModal(false);
-                  setEditingOrder(null);
-                }}>×</button>
-              </div>
-              <form onSubmit={handleAddressSubmit}>
-                <div className="modal-body">
-                  <div className="form-group mb-3">
-                    <label className="form-label">Name</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={addressForm.name}
-                      onChange={(e) => setAddressForm({ ...addressForm, name: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div className="form-group mb-3">
-                    <label className="form-label">Email</label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      value={addressForm.email}
-                      onChange={(e) => setAddressForm({ ...addressForm, email: e.target.value })}
-                    />
-                  </div>
-                  <div className="form-group mb-3">
-                    <label className="form-label">Phone</label>
-                    <input
-                      type="tel"
-                      className="form-control"
-                      value={addressForm.phone}
-                      onChange={(e) => setAddressForm({ ...addressForm, phone: e.target.value })}
-                    />
-                  </div>
-                  <div className="form-group mb-3">
-                    <label className="form-label">Address</label>
-                    <textarea
-                      className="form-control"
-                      rows={3}
-                      value={addressForm.address}
-                      onChange={(e) => setAddressForm({ ...addressForm, address: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="form-group mb-3">
-                        <label className="form-label">City</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={addressForm.city}
-                          onChange={(e) => setAddressForm({ ...addressForm, city: e.target.value })}
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="form-group mb-3">
-                        <label className="form-label">ZIP Code</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={addressForm.zipCode}
-                          onChange={(e) => setAddressForm({ ...addressForm, zipCode: e.target.value })}
-                          required
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" onClick={() => {
-                    setShowAddressModal(false);
-                    setEditingOrder(null);
-                  }}>
-                    Cancel
-                  </button>
-                  <button type="submit" className="btn btn-primary">
-                    <FiSave style={{ marginRight: '0.5rem' }} /> Save Address
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Assign Delivery modal removed */}
     </div>
   );
 }

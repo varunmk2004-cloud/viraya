@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const instance = axios.create({ baseURL: 'http://localhost:5000/api' });
+const instance = axios.create({ baseURL: 'https://viraya.onrender.com/api' });
 
 let isRefreshing = false;
 let failedQueue = [];

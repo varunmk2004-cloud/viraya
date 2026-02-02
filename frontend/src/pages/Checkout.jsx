@@ -3,7 +3,7 @@ import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../components/Toast';
 import Loading from '../components/Loading';
-import { FiCreditCard, FiMapPin, FiUser, FiMail, FiPhone, FiCheck } from 'react-icons/fi';
+import { FiMapPin, FiUser, FiMail, FiPhone } from 'react-icons/fi';
 import Footer from '../components/Footer';
 
 export default function Checkout() {
@@ -43,8 +43,36 @@ export default function Checkout() {
     e.preventDefault();
     setProcessing(true);
     try {
+      // Create order in backend (clears cart, updates stock)
       await axios.post('/orders/checkout', form);
-      showToast('Order placed successfully!', 'success');
+
+      // Construct WhatsApp message
+      let message = `*New Order Request*\n\n`;
+      message += `*Customer Details:*\n`;
+      message += `Name: ${form.name}\n`;
+      message += `Email: ${form.email}\n`;
+      message += `Phone: ${form.phone}\n`;
+      message += `Address: ${form.address}, ${form.city}, ${form.zipCode}\n\n`;
+
+      message += `*Order Summary:*\n`;
+      cart.items.forEach(item => {
+        const price = item.product.price || item.product.rental?.pricePerDay || 0;
+        message += `- ${item.product.title} x ${item.qty}: ₹${(price * item.qty).toFixed(2)}\n`;
+      });
+      
+      const total = cart?.items.reduce((sum, item) => {
+        const price = item.product.price || item.product.rental?.pricePerDay || 0;
+        return sum + price * item.qty;
+      }, 0) || 0;
+
+      message += `\n*Total Amount:* ₹${total.toFixed(2)}`;
+
+      // Redirect to WhatsApp
+      const phoneNumber = "919113869169";
+      const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+      window.open(url, '_blank');
+
+      showToast('Order placed! Redirecting to WhatsApp...', 'success');
       setTimeout(() => nav('/'), 1500);
     } catch (err) {
       showToast(err.response?.data?.message || 'Failed to place order', 'error');
@@ -175,46 +203,14 @@ export default function Checkout() {
                   </div>
 
                   <div className="border-top pt-4 mb-4">
-                    <h3 className="h5 fw-semibold mb-3 d-flex align-items-center gap-2">
-                      <FiCreditCard className="text-primary" /> Payment Method
-                    </h3>
-                    <div className="form-check mb-2" style={{ padding: '1rem', border: '1px solid #dee2e6', borderRadius: '0.375rem' }}>
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        id="payment-card"
-                        name="payment"
-                        value="card"
-                        checked={form.paymentMethod === 'card'}
-                        onChange={(e) => setForm({ ...form, paymentMethod: e.target.value })}
-                      />
-                      <label className="form-check-label" htmlFor="payment-card">
-                        Credit/Debit Card
-                      </label>
-                    </div>
-                    <div className="form-check" style={{ padding: '1rem', border: '1px solid #dee2e6', borderRadius: '0.375rem' }}>
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        id="payment-cod"
-                        name="payment"
-                        value="cod"
-                        checked={form.paymentMethod === 'cod'}
-                        onChange={(e) => setForm({ ...form, paymentMethod: e.target.value })}
-                      />
-                      <label className="form-check-label" htmlFor="payment-cod">
-                        Cash on Delivery
-                      </label>
-                    </div>
-                  </div>
-
-                  <div className="alert alert-info">
-                    <strong>Note:</strong> This is a demo checkout. Replace with Stripe/PayPal integration for production.
+                    <p className="text-muted small">
+                      By placing this order, you will be redirected to WhatsApp to confirm details with our team.
+                    </p>
                   </div>
 
                   <button
                     type="submit"
-                    className="btn btn-primary w-100"
+                    className="btn btn-success w-100"
                     style={{ fontSize: '1.25rem', padding: '0.5rem 1rem' }}
                     disabled={processing}
                   >
@@ -225,7 +221,7 @@ export default function Checkout() {
                       </>
                     ) : (
                       <>
-                        <FiCheck style={{ marginRight: '0.5rem' }} /> Place Order
+                        <FiPhone style={{ marginRight: '0.5rem' }} /> Place Order via WhatsApp
                       </>
                     )}
                   </button>

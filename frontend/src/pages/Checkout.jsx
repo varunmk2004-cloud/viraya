@@ -17,7 +17,6 @@ export default function Checkout() {
     address: '',
     city: '',
     zipCode: '',
-    paymentMethod: 'card',
   });
   const nav = useNavigate();
   const { showToast } = useToast();
@@ -260,7 +259,7 @@ export default function Checkout() {
                   <div className="border-top pt-3">
                     <div className="d-flex justify-content-between">
                       <span className="fw-bold fs-5">Total</span>
-                      <span className="fw-bold fs-4" style={{ color: '#d4af37' }}>₹{total.toFixed(2)}</span>
+                      <span className="fw-bold fs-4 text-primary">₹{total.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>

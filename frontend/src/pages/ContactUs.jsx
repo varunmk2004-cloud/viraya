@@ -68,7 +68,7 @@ export default function ContactUs() {
         <div 
           className="position-absolute top-0 left-0 w-100 h-100"
           style={{
-            background: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23d4af37\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+            background: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%231e3c72\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
             opacity: 0.3,
           }}
         ></div>
@@ -79,11 +79,11 @@ export default function ContactUs() {
               style={{
                 width: '80px',
                 height: '80px',
-                background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                boxShadow: '0 4px 20px rgba(212, 175, 55, 0.4)',
+                background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
+                boxShadow: '0 4px 20px rgba(30, 60, 114, 0.4)',
               }}
             >
-              <FiMessageCircle size={40} style={{ color: '#1a1a1a' }} />
+              <FiMessageCircle size={40} style={{ color: '#ffffff' }} />
             </div>
           </div>
           <h1 
@@ -115,7 +115,7 @@ export default function ContactUs() {
           {/* Contact Information */}
           <div className="col-md-4">
             <div className="sticky-top" style={{ top: '100px' }}>
-              <div className="card h-100 shadow-sm" style={{ border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+              <div className="card h-100 shadow-sm" style={{ border: '1px solid rgba(30, 60, 114, 0.2)' }}>
                 <div className="p-4">
                   <h3 
                     className="h4 fw-bold mb-4 gold-accent"
@@ -131,10 +131,10 @@ export default function ContactUs() {
                         style={{
                           width: '48px',
                           height: '48px',
-                          background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
+                          background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
                         }}
                       >
-                        <FiMail style={{ color: '#1a1a1a' }} size={20} />
+                        <FiMail style={{ color: '#ffffff' }} size={20} />
                       </div>
                       <div>
                         <h5 className="fw-semibold mb-1">Email</h5>
@@ -149,15 +149,14 @@ export default function ContactUs() {
                         style={{
                           width: '48px',
                           height: '48px',
-                          background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
+                          background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
                         }}
                       >
-                        <FiPhone style={{ color: '#1a1a1a' }} size={20} />
+                        <FiPhone style={{ color: '#ffffff' }} size={20} />
                       </div>
                       <div>
                         <h5 className="fw-semibold mb-1">Phone</h5>
-                        <p className="text-muted mb-0">+1 (555) 123-4567</p>
-                        <p className="text-muted mb-0">+1 (555) 987-6543</p>
+                        <p className="text-muted mb-0">+919113869169</p>
                       </div>
                     </div>
 
@@ -167,10 +166,10 @@ export default function ContactUs() {
                         style={{
                           width: '48px',
                           height: '48px',
-                          background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
+                          background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
                         }}
                       >
-                        <FiMapPin style={{ color: '#1a1a1a' }} size={20} />
+                        <FiMapPin style={{ color: '#ffffff' }} size={20} />
                       </div>
                       <div>
                         <h5 className="fw-semibold mb-1">Address</h5>
@@ -184,7 +183,7 @@ export default function ContactUs() {
                     </div>
                   </div>
 
-                  <div className="pt-3" style={{ borderTop: '1px solid rgba(212, 175, 55, 0.2)' }}>
+                  <div className="pt-3" style={{ borderTop: '1px solid rgba(30, 60, 114, 0.2)' }}>
                     <h5 className="fw-semibold mb-3">Business Hours</h5>
                     <div className="text-muted small">
                       <p className="mb-2"><strong>Monday - Friday:</strong> 9:00 AM - 6:00 PM</p>
@@ -199,7 +198,7 @@ export default function ContactUs() {
 
           {/* Contact Form */}
           <div className="col-md-8">
-            <div className="card shadow-sm" style={{ border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+            <div className="card shadow-sm" style={{ border: '1px solid rgba(30, 60, 114, 0.2)' }}>
               <div className="p-5">
                 <h3 
                   className="h4 fw-bold mb-4 gold-accent"
@@ -313,4 +312,3 @@ export default function ContactUs() {
     </>
   );
 }
-

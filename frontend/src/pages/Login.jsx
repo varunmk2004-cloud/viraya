@@ -61,8 +61,8 @@ export default function Login() {
                     style={{
                       width: '64px',
                       height: '64px',
-                      background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                      boxShadow: '0 4px 20px rgba(212, 175, 55, 0.3)',
+                      background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
+                      boxShadow: '0 4px 20px rgba(30, 60, 114, 0.3)',
                     }}
                   >
                     <FiLogIn style={{ color: '#fff' }} size={28} />

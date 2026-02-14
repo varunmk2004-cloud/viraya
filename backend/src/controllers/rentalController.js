@@ -1,17 +1,13 @@
 import Rental from '../models/Rental.js';
 import Product from '../models/Product.js';
+import { checkStockAvailability } from '../utils/stockUtils.js';
 
 const isAvailable = async (productId, startDate, endDate) => {
-  const overlapping = await Rental.findOne({
-    product: productId,
-    status: { $in: ['requested','approved','ongoing'] },
-    $or: [
-      { startDate: { $lte: endDate, $gte: startDate } },
-      { endDate: { $lte: endDate, $gte: startDate } },
-      { startDate: { $lte: startDate }, endDate: { $gte: endDate } }
-    ]
-  });
-  return !overlapping;
+  const product = await Product.findById(productId);
+  if (!product) return false;
+
+  const { available } = await checkStockAvailability(product, startDate, endDate);
+  return available >= 1;
 };
 
 export const requestRental = async (req, res) => {

@@ -1,4 +1,39 @@
 import Product from '../models/Product.js';
+import { checkStockAvailability } from '../utils/stockUtils.js';
+
+export const checkAvailability = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { start, end } = req.query;
+
+    if (!start || !end) {
+      return res.status(400).json({ message: 'Start and end dates are required' });
+    }
+
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+        return res.status(400).json({ message: 'Invalid dates' });
+    }
+
+    const product = await Product.findById(id);
+    if (!product) return res.status(404).json({ message: 'Product not found' });
+
+    const { available, maxUsed } = await checkStockAvailability(product, startDate, endDate);
+
+    res.json({ 
+      productId: id,
+      totalStock: product.stock,
+      maxUsedInPeriod: maxUsed,
+      available
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: err.message });
+  }
+};
 
 export const getProducts = async (req, res) => {
   const { search, category, isRental } = req.query;

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e3c72"/>
+      <stop offset="100%" stop-color="#2a5298"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.0)"/>
+      <stop offset="50%" stop-color="rgba(255,255,255,0.25)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.0)"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#g1)"/>
+  <g fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2">
+    <circle cx="300" cy="220" r="100"/>
+    <circle cx="900" cy="200" r="80"/>
+    <circle cx="600" cy="160" r="60"/>
+  </g>
+  <g>
+    <rect x="180" y="340" width="160" height="220" rx="12" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)" />
+    <rect x="520" y="320" width="160" height="240" rx="12" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)" />
+    <rect x="860" y="360" width="160" height="200" rx="12" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)" />
+    <path d="M260 340 L260 220" stroke="rgba(255,255,255,0.5)" stroke-width="4"/>
+    <path d="M600 320 L600 160" stroke="rgba(255,255,255,0.5)" stroke-width="4"/>
+    <path d="M940 360 L940 200" stroke="rgba(255,255,255,0.5)" stroke-width="4"/>
+  </g>
+  <rect x="0" y="0" width="1200" height="800" fill="url(#g2)"/>
+</svg>

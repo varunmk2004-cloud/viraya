@@ -31,7 +31,7 @@ export default function Navbar() {
         background: 'rgba(255, 255, 255, 0.98)',
         backdropFilter: 'blur(12px) saturate(180%)',
         WebkitBackdropFilter: 'blur(12px) saturate(180%)',
-        borderBottom: '1px solid rgba(212, 175, 55, 0.15)',
+        borderBottom: '1px solid rgba(30, 60, 114, 0.15)',
         boxShadow: '0 1px 15px rgba(26, 26, 26, 0.04)',
         width: '100%',
         marginTop: 0,
@@ -51,19 +51,14 @@ export default function Navbar() {
             <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#1a1a1a', padding: '0.5rem', transition: 'color 0.3s' }}>
               <FiHome /> Home
             </Link>
-            <Link to="/cart" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#1a1a1a', padding: '0.5rem', transition: 'color 0.3s' }}>
-              <FiShoppingCart /> Cart
-            </Link>
-            {user && (
-              <Link to="/orders" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#1a1a1a', padding: '0.5rem', transition: 'color 0.3s' }}>
-                <FiPackage /> Orders
-              </Link>
-            )}
             <Link to="/about" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#1a1a1a', padding: '0.5rem', transition: 'color 0.3s' }}>
               <FiInfo /> About
             </Link>
             <Link to="/contact" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#1a1a1a', padding: '0.5rem', transition: 'color 0.3s' }}>
               <FiMessageCircle /> Contact
+            </Link>
+            <Link to="/cart" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#1a1a1a', padding: '0.5rem', transition: 'color 0.3s' }}>
+              <FiShoppingCart /> Cart
             </Link>
             
             {user ? (
@@ -78,7 +73,10 @@ export default function Navbar() {
                     <FiPackage /> Delivery
                   </Link>
                 )}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingLeft: '1rem', borderLeft: '1px solid rgba(212, 175, 55, 0.2)' }}>
+                <Link to="/orders" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#1a1a1a', padding: '0.5rem', transition: 'color 0.3s' }}>
+                  <FiPackage /> Orders
+                </Link>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingLeft: '1rem', borderLeft: '1px solid rgba(30, 60, 114, 0.2)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <div
                       style={{
@@ -88,10 +86,10 @@ export default function Navbar() {
                         justifyContent: 'center',
                         width: '32px',
                         height: '32px',
-                        background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
+                        background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
                       }}
                     >
-                      <FiUser style={{ color: '#1a1a1a' }} />
+                      <FiUser style={{ color: '#ffffff' }} />
                     </div>
                     <span style={{ fontWeight: 500 }}>{user.name}</span>
                   </div>
@@ -114,7 +112,7 @@ export default function Navbar() {
                 </div>
               </>
             ) : (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', paddingLeft: '1rem', borderLeft: '1px solid rgba(212, 175, 55, 0.2)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', paddingLeft: '1rem', borderLeft: '1px solid rgba(30, 60, 114, 0.2)' }}>
                 <Link to="/login" style={{ textDecoration: 'none', color: '#1a1a1a', padding: '0.5rem', transition: 'color 0.3s' }}>
                   Login
                 </Link>
@@ -157,12 +155,18 @@ export default function Navbar() {
             gap: '1rem',
             paddingTop: '1rem',
             paddingBottom: '1rem',
-            borderTop: '1px solid rgba(212, 175, 55, 0.2)'
+            borderTop: '1px solid rgba(30, 60, 114, 0.2)'
           }}
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             <Link to="/" onClick={closeMenu} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#1a1a1a', padding: '0.75rem', borderRadius: '0.375rem', transition: 'background 0.3s' }}>
               <FiHome /> Home
+            </Link>
+            <Link to="/about" onClick={closeMenu} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#1a1a1a', padding: '0.75rem', borderRadius: '0.375rem', transition: 'background 0.3s' }}>
+              <FiInfo /> About
+            </Link>
+            <Link to="/contact" onClick={closeMenu} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#1a1a1a', padding: '0.75rem', borderRadius: '0.375rem', transition: 'background 0.3s' }}>
+              <FiMessageCircle /> Contact
             </Link>
             <Link to="/cart" onClick={closeMenu} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#1a1a1a', padding: '0.75rem', borderRadius: '0.375rem', transition: 'background 0.3s' }}>
               <FiShoppingCart /> Cart
@@ -172,15 +176,9 @@ export default function Navbar() {
                 <FiPackage /> Orders
               </Link>
             )}
-            <Link to="/about" onClick={closeMenu} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#1a1a1a', padding: '0.75rem', borderRadius: '0.375rem', transition: 'background 0.3s' }}>
-              <FiInfo /> About
-            </Link>
-            <Link to="/contact" onClick={closeMenu} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#1a1a1a', padding: '0.75rem', borderRadius: '0.375rem', transition: 'background 0.3s' }}>
-              <FiMessageCircle /> Contact
-            </Link>
           </div>
           
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', paddingTop: '1rem', borderTop: '1px solid rgba(212, 175, 55, 0.2)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', paddingTop: '1rem', borderTop: '1px solid rgba(30, 60, 114, 0.2)' }}>
             {user ? (
               <>
                 {user.role === 'admin' && (
@@ -202,10 +200,10 @@ export default function Navbar() {
                       justifyContent: 'center',
                       width: '32px',
                       height: '32px',
-                      background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
+                      background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)',
                     }}
                   >
-                    <FiUser style={{ color: '#1a1a1a' }} />
+                    <FiUser style={{ color: '#ffffff' }} />
                   </div>
                   <span style={{ fontWeight: 500 }}>{user.name}</span>
                 </div>

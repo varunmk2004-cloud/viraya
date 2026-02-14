@@ -11,9 +11,15 @@ export default function RentalRequest() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState({ startDate: '', endDate: '' });
+  const [searchParams] = useSearchParams();
+  const [form, setForm] = useState({ 
+    startDate: searchParams.get('start') || '', 
+    endDate: searchParams.get('end') || '' 
+  });
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const [availability, setAvailability] = useState(null);
+  const [checkingAvailability, setCheckingAvailability] = useState(false);
   const nav = useNavigate();
   const { showToast } = useToast();
   const { user } = useContext(AuthContext);
@@ -31,6 +37,25 @@ export default function RentalRequest() {
         showToast('Failed to load product', 'error');
       });
   }, [id]);
+
+  useEffect(() => {
+    if (form.startDate && form.endDate && new Date(form.startDate) < new Date(form.endDate)) {
+      setCheckingAvailability(true);
+      axios.get(`/products/${id}/availability?start=${form.startDate}&end=${form.endDate}`)
+        .then(res => {
+          setAvailability(res.data);
+        })
+        .catch(err => {
+          console.error(err);
+          setAvailability(null);
+        })
+        .finally(() => {
+          setCheckingAvailability(false);
+        });
+    } else {
+      setAvailability(null);
+    }
+  }, [form.startDate, form.endDate, id]);
 
   const validate = () => {
     const newErrors = {};
@@ -141,8 +166,8 @@ export default function RentalRequest() {
                     style={{
                       width: '64px',
                       height: '64px',
-                      background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                      boxShadow: '0 4px 20px rgba(212, 175, 55, 0.3)',
+                      background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
+                      boxShadow: '0 4px 20px rgba(30, 60, 114, 0.3)',
                     }}
                   >
                     <FiCalendar className="text-white" size={28} />
@@ -214,6 +239,26 @@ export default function RentalRequest() {
                     </div>
                   </div>
 
+                  {checkingAvailability && (
+                    <div className="text-center mb-3">
+                      <span className="spinner-border spinner-border-sm text-primary" role="status" aria-hidden="true"></span>
+                      <span className="ms-2 text-muted">Checking availability...</span>
+                    </div>
+                  )}
+
+                  {availability && !checkingAvailability && (
+                    <div className={`alert ${availability.available > 0 ? 'alert-success' : 'alert-danger'} mb-4`}>
+                      <div className="d-flex justify-content-between align-items-center">
+                        <div>
+                          <strong>{availability.available > 0 ? 'Available' : 'Out of Stock'}</strong>
+                          <div className="small">
+                            {availability.available} units available for selected dates (Total Stock: {availability.totalStock})
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {days > 0 && (
                     <div className="alert alert-light mb-4">
                       <div className="d-flex justify-content-between align-items-center mb-3">
@@ -226,7 +271,7 @@ export default function RentalRequest() {
                       <hr />
                       <div className="d-flex justify-content-between align-items-center">
                         <span className="h6 fw-semibold text-muted">Total Amount</span>
-                        <span className="display-6 fw-bold" style={{ color: '#d4af37' }}>₹{total.toFixed(2)}</span>
+                        <span className="display-6 fw-bold text-primary">₹{total.toFixed(2)}</span>
                       </div>
                     </div>
                   )}
@@ -235,7 +280,7 @@ export default function RentalRequest() {
                     type="submit"
                     className="btn btn-success w-100"
                     style={{ fontSize: '1.25rem', padding: '0.5rem 1rem' }}
-                    disabled={submitting}
+                    disabled={submitting || checkingAvailability || (availability && availability.available <= 0)}
                   >
                     {submitting ? (
                       <>

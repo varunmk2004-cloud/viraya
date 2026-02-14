@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="ga" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e3c72"/>
+      <stop offset="100%" stop-color="#2a5298"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#ga)"/>
+  <g fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.3)">
+    <rect x="300" y="220" width="160" height="360" rx="12"/>
+    <circle cx="380" cy="370" r="48" fill="rgba(255,255,255,0.18)"/>
+    <circle cx="380" cy="290" r="34" fill="rgba(255,255,255,0.18)"/>
+    <rect x="740" y="260" width="160" height="320" rx="12"/>
+    <circle cx="820" cy="380" r="48" fill="rgba(255,255,255,0.18)"/>
+    <circle cx="820" cy="300" r="34" fill="rgba(255,255,255,0.18)"/>
+  </g>
+  <g stroke="rgba(255,255,255,0.5)" stroke-width="6" fill="none">
+    <path d="M120 520 C220 420, 280 420, 380 520" />
+    <path d="M520 520 C620 420, 680 420, 780 520" />
+    <path d="M920 520 C1020 420, 1080 420, 1180 520" />
+  </g>
+</svg>

@@ -139,7 +139,7 @@ export default function MyOrders() {
                                   <div className="text-muted small mb-1">
                                     Quantity: {item.qty} {item.type === 'rental' ? '(Rental)' : ''}
                                   </div>
-                                  <div className="fw-semibold" style={{ color: '#d4af37' }}>
+                                  <div className="fw-semibold text-primary">
                                     ₹{((item.price || 0) * item.qty).toLocaleString()}
                                   </div>
                                 </div>

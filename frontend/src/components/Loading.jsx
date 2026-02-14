@@ -36,7 +36,7 @@ export default function Loading({ size = 'md', fullScreen = false }) {
         style={{
           width: spinnerSize,
           height: spinnerSize,
-          borderColor: '#d4af37',
+          borderColor: '#4169E1',
           borderRightColor: 'transparent'
         }}
       />

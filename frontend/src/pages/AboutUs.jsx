@@ -22,7 +22,7 @@ export default function AboutUs() {
         <div 
           className="position-absolute top-0 left-0 w-100 h-100"
           style={{
-            background: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23d4af37\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+            background: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%231e3c72\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
             opacity: 0.3,
           }}
         ></div>
@@ -33,11 +33,11 @@ export default function AboutUs() {
               style={{
                 width: '100px',
                 height: '100px',
-                background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                boxShadow: '0 4px 20px rgba(212, 175, 55, 0.4)',
+                background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
+                boxShadow: '0 4px 20px rgba(30, 60, 114, 0.4)',
               }}
             >
-              <FiAward size={50} style={{ color: '#1a1a1a' }} />
+              <FiAward size={50} style={{ color: '#ffffff' }} />
             </div>
           </div>
           <h1 
@@ -101,7 +101,7 @@ export default function AboutUs() {
         </div>
         <div className="col-lg-6">
           <div className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-            <div className="card h-100 shadow-sm" style={{ border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+            <div className="card h-100 shadow-sm" style={{ border: '1px solid rgba(30, 60, 114, 0.2)' }}>
               <div className="p-4">
                 <h3 
                   className="h4 fw-bold mb-4"
@@ -121,7 +121,7 @@ export default function AboutUs() {
                   transform visions into reality. We believe every event deserves the finest 
                   attention to detail, quality craftsmanship, and personalized service.
                 </p>
-                <div className="mt-4 pt-4" style={{ borderTop: '1px solid rgba(212, 175, 55, 0.2)' }}>
+                <div className="mt-4 pt-4" style={{ borderTop: '1px solid rgba(30, 60, 114, 0.2)' }}>
                   <h3 
                     className="h4 fw-bold mb-3"
                     style={{ fontFamily: "'Playfair Display', serif" }}
@@ -157,18 +157,18 @@ export default function AboutUs() {
         </h2>
         <div className="row g-4">
           <div className="col-md-6 col-lg-3">
-            <div className="card h-100 text-center shadow-sm animate-fade-in-up" style={{ border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+            <div className="card h-100 text-center shadow-sm animate-fade-in-up" style={{ border: '1px solid rgba(30, 60, 114, 0.2)' }}>
               <div className="p-4">
                 <div
                   className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
                   style={{
                     width: '80px',
                     height: '80px',
-                    background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                    boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)',
+                    background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
+                    boxShadow: '0 4px 15px rgba(30, 60, 114, 0.3)',
                   }}
                 >
-                  <FiAward size={35} style={{ color: '#1a1a1a' }} />
+                  <FiAward size={35} style={{ color: '#ffffff' }} />
                 </div>
                 <h4 className="h5 fw-bold mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>Excellence</h4>
                 <p className="text-muted mb-0" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.1rem' }}>
@@ -179,18 +179,18 @@ export default function AboutUs() {
           </div>
 
           <div className="col-md-6 col-lg-3">
-            <div className="card h-100 text-center shadow-sm animate-fade-in-up" style={{ border: '1px solid rgba(212, 175, 55, 0.2)', animationDelay: '0.1s' }}>
+            <div className="card h-100 text-center shadow-sm animate-fade-in-up" style={{ border: '1px solid rgba(30, 60, 114, 0.2)', animationDelay: '0.1s' }}>
               <div className="p-4">
                 <div
                   className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
                   style={{
                     width: '80px',
                     height: '80px',
-                    background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                    boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)',
+                    background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
+                    boxShadow: '0 4px 15px rgba(30, 60, 114, 0.3)',
                   }}
                 >
-                  <FiHeart size={35} style={{ color: '#1a1a1a' }} />
+                  <FiHeart size={35} style={{ color: '#ffffff' }} />
                 </div>
                 <h4 className="h5 fw-bold mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>Passion</h4>
                 <p className="text-muted mb-0" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.1rem' }}>
@@ -201,18 +201,18 @@ export default function AboutUs() {
           </div>
 
           <div className="col-md-6 col-lg-3">
-            <div className="card h-100 text-center shadow-sm animate-fade-in-up" style={{ border: '1px solid rgba(212, 175, 55, 0.2)', animationDelay: '0.2s' }}>
+            <div className="card h-100 text-center shadow-sm animate-fade-in-up" style={{ border: '1px solid rgba(30, 60, 114, 0.2)', animationDelay: '0.2s' }}>
               <div className="p-4">
                 <div
                   className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
                   style={{
                     width: '80px',
                     height: '80px',
-                    background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                    boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)',
+                    background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
+                    boxShadow: '0 4px 15px rgba(30, 60, 114, 0.3)',
                   }}
                 >
-                  <FiUsers size={35} style={{ color: '#1a1a1a' }} />
+                  <FiUsers size={35} style={{ color: '#ffffff' }} />
                 </div>
                 <h4 className="h5 fw-bold mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>Integrity</h4>
                 <p className="text-muted mb-0" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.1rem' }}>
@@ -223,18 +223,18 @@ export default function AboutUs() {
           </div>
 
           <div className="col-md-6 col-lg-3">
-            <div className="card h-100 text-center shadow-sm animate-fade-in-up" style={{ border: '1px solid rgba(212, 175, 55, 0.2)', animationDelay: '0.3s' }}>
+            <div className="card h-100 text-center shadow-sm animate-fade-in-up" style={{ border: '1px solid rgba(30, 60, 114, 0.2)', animationDelay: '0.3s' }}>
               <div className="p-4">
                 <div
                   className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
                   style={{
                     width: '80px',
                     height: '80px',
-                    background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                    boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)',
+                    background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
+                    boxShadow: '0 4px 15px rgba(30, 60, 114, 0.3)',
                   }}
                 >
-                  <FiTarget size={35} style={{ color: '#1a1a1a' }} />
+                  <FiTarget size={35} style={{ color: '#ffffff' }} />
                 </div>
                 <h4 className="h5 fw-bold mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>Innovation</h4>
                 <p className="text-muted mb-0" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.1rem' }}>
@@ -262,11 +262,11 @@ export default function AboutUs() {
                 style={{
                   width: '70px',
                   height: '70px',
-                  background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                  boxShadow: '0 4px 15px rgba(212, 175, 55, 0.4)',
+                  background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
+                  boxShadow: '0 4px 15px rgba(30, 60, 114, 0.4)',
                 }}
               >
-                <FiTrendingUp size={30} style={{ color: '#1a1a1a' }} />
+                <FiTrendingUp size={30} style={{ color: '#ffffff' }} />
               </div>
               <h3 className="display-4 fw-bold mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>500+</h3>
               <p className="mb-0" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.2rem', opacity: 0.9 }}>
@@ -282,11 +282,11 @@ export default function AboutUs() {
                 style={{
                   width: '70px',
                   height: '70px',
-                  background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                  boxShadow: '0 4px 15px rgba(212, 175, 55, 0.4)',
+                  background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
+                  boxShadow: '0 4px 15px rgba(30, 60, 114, 0.4)',
                 }}
               >
-                <FiUsers size={30} style={{ color: '#1a1a1a' }} />
+                <FiUsers size={30} style={{ color: '#ffffff' }} />
               </div>
               <h3 className="display-4 fw-bold mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>1000+</h3>
               <p className="mb-0" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.2rem', opacity: 0.9 }}>
@@ -302,11 +302,11 @@ export default function AboutUs() {
                 style={{
                   width: '70px',
                   height: '70px',
-                  background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                  boxShadow: '0 4px 15px rgba(212, 175, 55, 0.4)',
+                  background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
+                  boxShadow: '0 4px 15px rgba(30, 60, 114, 0.4)',
                 }}
               >
-                <FiStar size={30} style={{ color: '#1a1a1a' }} />
+                <FiStar size={30} style={{ color: '#ffffff' }} />
               </div>
               <h3 className="display-4 fw-bold mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>10+</h3>
               <p className="mb-0" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.2rem', opacity: 0.9 }}>
@@ -322,11 +322,11 @@ export default function AboutUs() {
                 style={{
                   width: '70px',
                   height: '70px',
-                  background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                  boxShadow: '0 4px 15px rgba(212, 175, 55, 0.4)',
+                  background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
+                  boxShadow: '0 4px 15px rgba(30, 60, 114, 0.4)',
                 }}
               >
-                <FiAward size={30} style={{ color: '#1a1a1a' }} />
+                <FiAward size={30} style={{ color: '#ffffff' }} />
               </div>
               <h3 className="display-4 fw-bold mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>50+</h3>
               <p className="mb-0" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.2rem', opacity: 0.9 }}>
@@ -354,11 +354,11 @@ export default function AboutUs() {
                   style={{
                     width: '60px',
                     height: '60px',
-                    background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                    boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)',
+                    background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
+                    boxShadow: '0 4px 15px rgba(30, 60, 114, 0.3)',
                   }}
                 >
-                  <FiStar size={25} style={{ color: '#1a1a1a' }} />
+                  <FiStar size={25} style={{ color: '#ffffff' }} />
                 </div>
                 <div>
                   <h5 className="fw-bold mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Premium Quality</h5>
@@ -376,11 +376,11 @@ export default function AboutUs() {
                   style={{
                     width: '60px',
                     height: '60px',
-                    background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                    boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)',
+                    background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
+                    boxShadow: '0 4px 15px rgba(30, 60, 114, 0.3)',
                   }}
                 >
-                  <FiUsers size={25} style={{ color: '#1a1a1a' }} />
+                  <FiUsers size={25} style={{ color: '#ffffff' }} />
                 </div>
                 <div>
                   <h5 className="fw-bold mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Expert Team</h5>
@@ -398,11 +398,11 @@ export default function AboutUs() {
                   style={{
                     width: '60px',
                     height: '60px',
-                    background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                    boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)',
+                    background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
+                    boxShadow: '0 4px 15px rgba(30, 60, 114, 0.3)',
                   }}
                 >
-                  <FiHeart size={25} style={{ color: '#1a1a1a' }} />
+                  <FiHeart size={25} style={{ color: '#ffffff' }} />
                 </div>
                 <div>
                   <h5 className="fw-bold mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Personalized Service</h5>
@@ -420,11 +420,11 @@ export default function AboutUs() {
                   style={{
                     width: '60px',
                     height: '60px',
-                    background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                    boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)',
+                    background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
+                    boxShadow: '0 4px 15px rgba(30, 60, 114, 0.3)',
                   }}
                 >
-                  <FiTarget size={25} style={{ color: '#1a1a1a' }} />
+                  <FiTarget size={25} style={{ color: '#ffffff' }} />
                 </div>
                 <div>
                   <h5 className="fw-bold mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Attention to Detail</h5>
@@ -442,11 +442,11 @@ export default function AboutUs() {
                   style={{
                     width: '60px',
                     height: '60px',
-                    background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                    boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)',
+                    background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
+                    boxShadow: '0 4px 15px rgba(30, 60, 114, 0.3)',
                   }}
                 >
-                  <FiTrendingUp size={25} style={{ color: '#1a1a1a' }} />
+                  <FiTrendingUp size={25} style={{ color: '#ffffff' }} />
                 </div>
                 <div>
                   <h5 className="fw-bold mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Reliable & Trusted</h5>
@@ -456,36 +456,11 @@ export default function AboutUs() {
                 </div>
               </div>
             </div>
-
-            <div className="col-md-6 col-lg-4">
-              <div className="d-flex gap-3 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
-                <div
-                  className="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                  style={{
-                    width: '60px',
-                    height: '60px',
-                    background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                    boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)',
-                  }}
-                >
-                  <FiAward size={25} style={{ color: '#1a1a1a' }} />
-                </div>
-                <div>
-                  <h5 className="fw-bold mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Proven Track Record</h5>
-                  <p className="text-muted mb-0" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.1rem' }}>
-                    Years of successful events and satisfied clients speak for themselves.
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
-
-
       </div>
       <Footer />
     </>
   );
 }
-

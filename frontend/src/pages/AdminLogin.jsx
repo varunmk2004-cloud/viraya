@@ -106,7 +106,7 @@ export default function AdminLogin() {
           minHeight: 'calc(100vh - 70px)',
           paddingTop: '2rem', 
           paddingBottom: '2rem',
-          background: 'linear-gradient(135deg, rgba(26, 26, 26, 0.02) 0%, rgba(212, 175, 55, 0.05) 100%)',
+          background: 'linear-gradient(135deg, rgba(26, 26, 26, 0.02) 0%, rgba(30, 60, 114, 0.05) 100%)',
           position: 'relative'
         }}
       >
@@ -118,7 +118,7 @@ export default function AdminLogin() {
             right: '10%',
             width: '300px',
             height: '300px',
-            background: 'radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(30, 60, 114, 0.08) 0%, transparent 70%)',
             borderRadius: '50%',
             zIndex: 0
           }}
@@ -304,8 +304,8 @@ export default function AdminLogin() {
                           }
                         }}
                         onFocus={(e) => {
-                          e.target.style.borderColor = '#d4af37';
-                          e.target.style.boxShadow = '0 0 0 3px rgba(212, 175, 55, 0.1)';
+                          e.target.style.borderColor = '#4169E1';
+                          e.target.style.boxShadow = '0 0 0 3px rgba(30, 60, 114, 0.1)';
                         }}
                         onBlur={(e) => {
                           e.target.style.borderColor = errors.email ? '#dc3545' : '#e0e0e0';
@@ -368,8 +368,8 @@ export default function AdminLogin() {
                           }
                         }}
                         onFocus={(e) => {
-                          e.target.style.borderColor = '#d4af37';
-                          e.target.style.boxShadow = '0 0 0 3px rgba(212, 175, 55, 0.1)';
+                          e.target.style.borderColor = '#4169E1';
+                          e.target.style.boxShadow = '0 0 0 3px rgba(30, 60, 114, 0.1)';
                         }}
                         onBlur={(e) => {
                           e.target.style.borderColor = errors.password ? '#dc3545' : '#e0e0e0';
@@ -490,11 +490,11 @@ export default function AdminLogin() {
         @keyframes pulse {
           0%, 100% {
             transform: scale(1);
-            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 8px 30px rgba(30, 60, 114, 0.4);
           }
           50% {
             transform: scale(1.05);
-            box-shadow: 0 12px 40px rgba(212, 175, 55, 0.6);
+            box-shadow: 0 12px 40px rgba(30, 60, 114, 0.6);
           }
         }
         

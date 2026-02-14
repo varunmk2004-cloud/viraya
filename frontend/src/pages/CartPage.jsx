@@ -80,12 +80,12 @@ export default function CartPage() {
         <div 
           className="alert alert-info text-center py-5"
           style={{
-            background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.05), rgba(244, 228, 188, 0.05))',
-            border: '1px solid rgba(212, 175, 55, 0.2)',
+            background: 'linear-gradient(135deg, rgba(30, 60, 114, 0.05), rgba(42, 82, 152, 0.05))',
+            border: '1px solid rgba(30, 60, 114, 0.2)',
           }}
         >
           <div className="display-1 mb-3" style={{ fontSize: '4rem' }}>
-            <FiShoppingBag style={{ color: '#d4af37' }} />
+            <FiShoppingBag className="text-primary" />
           </div>
           <h3 
             className="h4 fw-bold mb-2"
@@ -211,7 +211,7 @@ export default function CartPage() {
                   <hr />
                   <div className="d-flex justify-content-between">
                     <span className="fw-bold">Total</span>
-                    <span className="fw-bold fs-4" style={{ color: '#d4af37' }}>₹{total.toFixed(2)}</span>
+                    <span className="fw-bold fs-4 text-primary">₹{total.toFixed(2)}</span>
                   </div>
                 </div>
                 <button

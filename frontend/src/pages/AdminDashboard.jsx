@@ -20,6 +20,7 @@ export default function AdminDashboard() {
     category: '',
     price: 0,
     stock: 0,
+    lowStockThreshold: 10,
     isRental: false,
     image: '',
     rental: { pricePerDay: 0, deposit: 0 }
@@ -66,6 +67,7 @@ export default function AdminDashboard() {
         category: '',
         price: 0,
         stock: 0,
+        lowStockThreshold: 10,
         isRental: false,
         image: '',
         rental: { pricePerDay: 0, deposit: 0 }
@@ -84,6 +86,7 @@ export default function AdminDashboard() {
       category: product.category || '',
       price: product.price || 0,
       stock: product.stock || 0,
+      lowStockThreshold: product.lowStockThreshold || 10,
       isRental: product.isRental || false,
       image: product.image || (product.images && product.images[0]) || '',
       rental: {
@@ -178,11 +181,11 @@ export default function AdminDashboard() {
             style={{
               width: '48px',
               height: '48px',
-              background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-              boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)',
+              background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
+              boxShadow: '0 4px 15px rgba(30, 60, 114, 0.3)',
             }}
           >
-            <FiShield style={{ color: '#1a1a1a' }} size={24} />
+            <FiShield style={{ color: '#ffffff' }} size={24} />
           </div>
           <div>
             <h1 
@@ -232,7 +235,7 @@ export default function AdminDashboard() {
               const Icon = stat.icon;
               return (
                 <div key={idx} className="col-xs-12 col-sm-6 col-md-3">
-                  <div className="card shadow-sm" style={{ border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+                  <div className="card shadow-sm" style={{ border: '1px solid rgba(30, 60, 114, 0.2)' }}>
                     <div style={{ padding: '1rem' }}>
                       <div className="d-flex align-items-center justify-content-between mb-3">
                         <div
@@ -240,10 +243,10 @@ export default function AdminDashboard() {
                           style={{
                             width: '50px',
                             height: '50px',
-                            background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
+                            background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
                           }}
                         >
-                          <Icon style={{ color: '#1a1a1a' }} size={24} />
+                          <Icon style={{ color: '#ffffff' }} size={24} />
                         </div>
                       </div>
                       <h6 className="text-muted small fw-semibold mb-1">{stat.title}</h6>
@@ -257,7 +260,7 @@ export default function AdminDashboard() {
 
           <div className="row g-4">
             <div className="col-md-6">
-              <div className="card shadow-sm" style={{ border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+              <div className="card shadow-sm" style={{ border: '1px solid rgba(30, 60, 114, 0.2)' }}>
                 <div style={{ padding: '1rem' }}>
                   <h5 className="fw-bold mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>
                     Quick Stats
@@ -278,7 +281,7 @@ export default function AdminDashboard() {
               </div>
             </div>
             <div className="col-md-6">
-              <div className="card shadow-sm" style={{ border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+              <div className="card shadow-sm" style={{ border: '1px solid rgba(30, 60, 114, 0.2)' }}>
                 <div style={{ padding: '1rem' }}>
                   <h5 className="fw-bold mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>
                     Recent Orders
@@ -321,6 +324,7 @@ export default function AdminDashboard() {
                   category: '',
                   price: 0,
                   stock: 0,
+                  lowStockThreshold: 10,
                   isRental: false,
                   rental: { pricePerDay: 0, deposit: 0 }
                 });
@@ -331,7 +335,7 @@ export default function AdminDashboard() {
             </button>
           </div>
 
-          <div className="card shadow-sm" style={{ border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+          <div className="card shadow-sm" style={{ border: '1px solid rgba(30, 60, 114, 0.2)' }}>
             <div style={{ padding: '1rem' }}>
               <div className="table-responsive">
                 <table className="table table-hover">
@@ -403,7 +407,21 @@ export default function AdminDashboard() {
                               <span className="badge bg-success">Purchase</span>
                             )}
                           </td>
-                          <td>{p.stock || '-'}</td>
+                          <td>
+                            {p.stock !== undefined ? (
+                              <div>
+                                <span className={p.stock === 0 ? 'text-danger fw-bold' : (p.stock <= (p.lowStockThreshold || 10) ? 'text-warning fw-semibold' : '')}>
+                                  {p.stock}
+                                </span>
+                                {p.stock > 0 && p.stock <= (p.lowStockThreshold || 10) && (
+                                  <span className="badge bg-warning text-dark ms-2">Low</span>
+                                )}
+                                {p.stock === 0 && (
+                                  <span className="badge bg-danger ms-2">Out</span>
+                                )}
+                              </div>
+                            ) : '-'}
+                          </td>
                           <td>
                             <button
                               className="btn btn-outline-primary btn-sm me-2"
@@ -435,7 +453,7 @@ export default function AdminDashboard() {
       {activeTab === 'users' && (
         <>
           <h3 className="h4 fw-bold mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>User Management</h3>
-          <div className="card shadow-sm" style={{ border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+          <div className="card shadow-sm" style={{ border: '1px solid rgba(30, 60, 114, 0.2)' }}>
             <div style={{ padding: '1rem' }}>
               <div className="table-responsive">
                 <table className="table table-hover">
@@ -498,7 +516,7 @@ export default function AdminDashboard() {
       {activeTab === 'orders' && (
         <>
           <h3 className="h4 fw-bold mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>Order Management</h3>
-          <div className="card shadow-sm" style={{ border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+          <div className="card shadow-sm" style={{ border: '1px solid rgba(30, 60, 114, 0.2)' }}>
             <div style={{ padding: '1rem' }}>
               <div className="table-responsive">
                 <table className="table table-hover">
@@ -640,6 +658,7 @@ export default function AdminDashboard() {
                     </div>
                   </div>
                   {productForm.isRental ? (
+                    <>
                     <div className="row">
                       <div className="col-md-6">
                         <div className="form-group mb-3">
@@ -659,6 +678,33 @@ export default function AdminDashboard() {
                       </div>
                       <div className="col-md-6">
                         <div className="form-group mb-3">
+                          <label className="form-label">Stock</label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            min="0"
+                            value={productForm.stock}
+                            onChange={(e) => setProductForm({ ...productForm, stock: parseInt(e.target.value) || 0 })}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-md-6">
+                        <div className="form-group mb-3">
+                          <label className="form-label">Low Stock Threshold</label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            min="0"
+                            value={productForm.lowStockThreshold}
+                            onChange={(e) => setProductForm({ ...productForm, lowStockThreshold: parseInt(e.target.value) || 10 })}
+                          />
+                          <small className="text-muted">Alert when stock falls below this number</small>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-md-6">
+                        <div className="form-group mb-3">
                           <label className="form-label">Deposit (₹)</label>
                           <input
                             type="number"
@@ -673,6 +719,7 @@ export default function AdminDashboard() {
                         </div>
                       </div>
                     </div>
+                    </>
                   ) : (
                     <div className="row">
                       <div className="col-md-6">
@@ -698,6 +745,19 @@ export default function AdminDashboard() {
                             value={productForm.stock}
                             onChange={(e) => setProductForm({ ...productForm, stock: parseInt(e.target.value) || 0 })}
                           />
+                        </div>
+                      </div>
+                      <div className="col-md-6">
+                        <div className="form-group mb-3">
+                          <label className="form-label">Low Stock Threshold</label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            min="0"
+                            value={productForm.lowStockThreshold}
+                            onChange={(e) => setProductForm({ ...productForm, lowStockThreshold: parseInt(e.target.value) || 10 })}
+                          />
+                          <small className="text-muted">Alert when stock falls below this number</small>
                         </div>
                       </div>
                     </div>

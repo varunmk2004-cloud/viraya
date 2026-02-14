@@ -12,6 +12,12 @@ export default function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [addingToCart, setAddingToCart] = useState(false);
+  
+  // Rental availability state
+  const [dates, setDates] = useState({ start: '', end: '' });
+  const [availability, setAvailability] = useState(null);
+  const [checkingAvailability, setCheckingAvailability] = useState(false);
+
   const { user } = useContext(AuthContext);
   const nav = useNavigate();
   const { showToast } = useToast();
@@ -30,6 +36,21 @@ export default function ProductDetail() {
       });
   }, [id]);
 
+  useEffect(() => {
+    if (dates.start && dates.end && new Date(dates.start) < new Date(dates.end)) {
+      setCheckingAvailability(true);
+      axios.get(`/products/${id}/availability?start=${dates.start}&end=${dates.end}`)
+        .then(res => setAvailability(res.data))
+        .catch(err => {
+          console.error(err);
+          setAvailability(null);
+        })
+        .finally(() => setCheckingAvailability(false));
+    } else {
+      setAvailability(null);
+    }
+  }, [dates.start, dates.end, id]);
+
   const addToCart = async () => {
     if (!user) {
       showToast('Please login to add items to cart', 'warning');
@@ -46,7 +67,13 @@ export default function ProductDetail() {
     }
   };
 
-  const goRental = () => nav(`/rental/${id}`);
+  const goRental = () => {
+    let url = `/rental/${id}`;
+    if (dates.start && dates.end) {
+        url += `?start=${dates.start}&end=${dates.end}`;
+    }
+    nav(url);
+  };
 
   if (loading) {
     return <Loading fullScreen />;
@@ -67,6 +94,10 @@ export default function ProductDetail() {
   const price = isRental
     ? `₹${product.rental?.pricePerDay || 0}/day`
     : `₹${product.price || 0}`;
+  
+  const lowStockThreshold = product.lowStockThreshold || 10;
+  const isLowStock = product.stock !== undefined && product.stock <= lowStockThreshold && product.stock > 0;
+  const isOutOfStock = product.stock !== undefined && product.stock === 0;
 
   return (
     <>
@@ -113,13 +144,32 @@ export default function ProductDetail() {
                 {product.title}
               </h1>
               <div className="d-flex align-items-baseline gap-3 mb-4">
-                <span className="display-6 fw-bold" style={{ color: '#d4af37' }}>{price}</span>
+                <span className="display-6 fw-bold text-primary">{price}</span>
                 {!isRental && product.originalPrice && (
                   <span className="h4 text-muted text-decoration-line-through">
                     ₹{product.originalPrice}
                   </span>
                 )}
               </div>
+
+              {/* Stock Information */}
+              {product.stock !== undefined && (
+                <div className="mb-4">
+                  {isOutOfStock ? (
+                    <div className="alert alert-danger mb-0">
+                      <strong>Out of Stock</strong> - This item is currently unavailable.
+                    </div>
+                  ) : isLowStock ? (
+                    <div className="alert alert-warning mb-0">
+                      <strong>Low Stock</strong> - Only {product.stock} {product.stock === 1 ? 'item' : 'items'} remaining!
+                    </div>
+                  ) : (
+                    <div className="alert alert-success mb-0">
+                      <strong>In Stock</strong> - {product.stock} {product.stock === 1 ? 'item' : 'items'} available
+                    </div>
+                  )}
+                </div>
+              )}
 
               <div className="mb-4">
                 <h3 className="h5 fw-semibold mb-2">Description</h3>
@@ -137,6 +187,61 @@ export default function ProductDetail() {
                       <li>Minimum rental: {product.rental.minDays} days</li>
                     )}
                   </ul>
+                  
+                  <div className="mt-3 pt-3 border-top">
+                    <h6 className="fw-semibold mb-2">Check Availability</h6>
+                    <div className="row g-2">
+                        <div className="col-6">
+                            <small className="d-block text-muted mb-1">Start Date</small>
+                            <input 
+                                type="date" 
+                                className="form-control form-control-sm"
+                                value={dates.start}
+                                onChange={e => setDates({...dates, start: e.target.value})}
+                                min={new Date().toISOString().split('T')[0]}
+                            />
+                        </div>
+                        <div className="col-6">
+                            <small className="d-block text-muted mb-1">End Date</small>
+                            <input 
+                                type="date" 
+                                className="form-control form-control-sm"
+                                value={dates.end}
+                                onChange={e => setDates({...dates, end: e.target.value})}
+                                min={dates.start || new Date().toISOString().split('T')[0]}
+                            />
+                        </div>
+                    </div>
+                    
+                    {checkingAvailability && <div className="text-muted small mt-2">Checking...</div>}
+                    
+                    {availability && (
+                        <div className={`mt-2 p-2 rounded ${availability.available > 0 ? 'bg-success bg-opacity-10 text-success' : 'bg-danger bg-opacity-10 text-danger'}`}>
+                            <strong>{availability.available > 0 ? 'Available' : 'Out of Stock'}</strong>
+                            <div className="small">
+                                {availability.available} units available (Total Stock: {availability.totalStock})
+                            </div>
+                            {availability.available > 0 && availability.available <= (product.lowStockThreshold || 10) && (
+                                <div className="small mt-1 text-warning">
+                                    <strong>⚠ Low Stock Warning:</strong> Only {availability.available} units available for these dates!
+                                </div>
+                            )}
+                        </div>
+                    )}
+                    
+                    {!availability && product.stock !== undefined && (
+                        <div className="mt-2 p-2 rounded bg-info bg-opacity-10 text-info">
+                            <div className="small">
+                                Total Stock: {product.stock} units
+                                {isLowStock && (
+                                    <span className="text-warning ms-2">
+                                        <strong>⚠ Low Stock</strong>
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                  </div>
                 </div>
               )}
 
@@ -144,7 +249,7 @@ export default function ProductDetail() {
                 {!isRental ? (
                   <button
                     onClick={addToCart}
-                    disabled={addingToCart}
+                    disabled={addingToCart || isOutOfStock}
                     className="btn btn-primary w-100"
                     style={{ fontSize: '1.25rem', padding: '0.5rem 1rem' }}
                   >
@@ -152,6 +257,10 @@ export default function ProductDetail() {
                       <>
                         <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                         Adding...
+                      </>
+                    ) : isOutOfStock ? (
+                      <>
+                        Out of Stock
                       </>
                     ) : (
                       <>

@@ -7,7 +7,7 @@ export default function Footer() {
     <footer
       className="mt-5 pt-5 border-top"
       style={{
-        background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.06), rgba(0,0,0,0.02))',
+        background: 'linear-gradient(135deg, rgba(30, 60, 114, 0.06), rgba(0,0,0,0.02))',
       }}
     >
       <div className="container">

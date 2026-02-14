@@ -102,10 +102,10 @@ export default function Register() {
                       height: '64px',
                       background: success 
                         ? 'linear-gradient(135deg, #28a745 0%, #20c997 100%)'
-                        : 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
+                        : 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
                       boxShadow: success 
                         ? '0 4px 20px rgba(40, 167, 69, 0.3)'
-                        : '0 4px 20px rgba(212, 175, 55, 0.3)',
+                        : '0 4px 20px rgba(30, 60, 114, 0.3)',
                       transition: 'all 0.3s ease',
                     }}
                   >

@@ -45,7 +45,6 @@ export default function Home() {
   }
 
   return (
-    <>
       <div>
       {/* Hero Section */}
       <div
@@ -62,7 +61,7 @@ export default function Home() {
         <div 
           className="position-absolute top-0 left-0 w-100 h-100"
           style={{
-            background: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23d4af37\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+            background: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%231e3c72\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
             opacity: 0.3,
           }}
         ></div>
@@ -73,8 +72,8 @@ export default function Home() {
               style={{
                 padding: '0.5rem 1.5rem',
                 marginBottom: '0.75rem',
-                background: 'linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%)',
-                color: '#1a1a1a',
+                background: 'linear-gradient(135deg, #1E3A8A 0%, #4169E1 50%, #6B9FFF 100%)',
+                color: '#ffffff',
                 fontSize: '0.875rem',
                 fontWeight: 600,
                 letterSpacing: '0.2em',
@@ -109,16 +108,64 @@ export default function Home() {
         </div>
       </div>
 
-
-
-      {/* Search and Filter */}
+      <div className="container animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+        <div
+          className="rounded p-4 p-md-5 mb-4 text-white"
+          style={{
+            background: 'var(--gradient-gold)',
+            boxShadow: '0 8px 30px rgba(30, 60, 114, 0.25)',
+            border: '1px solid #162e58'
+          }}
+        >
+          <div className="row align-items-center">
+            <div className="col-md-8">
+              <h2
+                className="h3 fw-bold mb-2"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                About Viraya Productions
+              </h2>
+              <p
+                className="mb-0"
+                style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: '1.05rem',
+                  opacity: 0.92
+                }}
+              >
+                We curate premium event equipment and luxury rentals, delivering elegant experiences with professional setup and round‑the‑clock support. From intimate gatherings to grand celebrations, our team ensures seamless execution with a refined aesthetic.
+              </p>
+            </div>
+            <div className="col-md-4 text-md-end mt-3 mt-md-0">
+              <Link
+                to="/about"
+                className="btn"
+                style={{
+                  border: '1.5px solid #ffffff',
+                  color: '#ffffff',
+                  backgroundColor: 'transparent',
+                  padding: '0.625rem 1rem',
+                  fontSize: '0.9rem',
+                  letterSpacing: '0.05em'
+                }}
+              >
+                Learn More
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+{/* Images removed */}
+ 
       <div className="mb-4 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
         <div className="row g-3" style={{ marginLeft: 0, marginRight: 0, alignItems: 'center' }}>
           <div className="col-md-8" style={{ paddingLeft: '0.75rem', paddingRight: '0.75rem' }}>
             <div className="position-relative">
               <FiSearch
                 className="position-absolute translate-middle-y"
-                style={{ color: '#d4af37', left: '0.75rem', top: '50%', zIndex: 1 }}
+                className="text-primary"
+                style={{ left: '0.75rem', top: '50%', zIndex: 1 }}
               />
               <input
                 type="text"
@@ -171,8 +218,8 @@ export default function Home() {
         <div 
           className="alert alert-info text-center py-5"
           style={{
-            background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.05), rgba(244, 228, 188, 0.05))',
-            border: '1px solid rgba(212, 175, 55, 0.2)',
+            background: 'linear-gradient(135deg, rgba(30, 60, 114, 0.05), rgba(42, 82, 152, 0.05))',
+            border: '1px solid rgba(30, 60, 114, 0.2)',
           }}
         >
           <div className="display-1 mb-3" style={{ fontSize: '4rem' }}>✨</div>
@@ -194,7 +241,7 @@ export default function Home() {
           </p>
         </div>
       ) : (
-        <>
+        <div>
           <div className="d-flex justify-content-between align-items-center mb-3 gold-accent">
             <h2 
               className="h2 fw-bold"
@@ -203,9 +250,8 @@ export default function Home() {
               {filterType === 'all' ? 'Premium Collection' : filterType === 'rental' ? 'Luxury Rentals' : 'Exclusive Items'}
             </h2>
             <span 
-              className="text-uppercase"
+              className="text-uppercase text-primary"
               style={{ 
-                color: '#d4af37',
                 fontSize: '0.875rem',
                 fontWeight: 600,
                 letterSpacing: '0.1em'
@@ -219,12 +265,12 @@ export default function Home() {
           <div 
             className="rounded p-3 mb-4 text-center animate-fade-in-up"
             style={{
-              background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(244, 228, 188, 0.1))',
-              border: '1px solid rgba(212, 175, 55, 0.3)',
+              background: 'linear-gradient(135deg, rgba(30, 60, 114, 0.1), rgba(42, 82, 152, 0.1))',
+              border: '1px solid rgba(30, 60, 114, 0.3)',
             }}
           >
             <div className="d-flex align-items-center justify-content-center gap-2">
-              <FiStar style={{ color: '#d4af37' }} />
+              <FiStar className="text-primary" />
               <span 
                 className="fw-semibold"
                 style={{ 
@@ -235,7 +281,7 @@ export default function Home() {
               >
                 Premium Quality Equipment • Professional Setup • 24/7 Support
               </span>
-              <FiStar style={{ color: '#d4af37' }} />
+              <FiStar className="text-primary" />
             </div>
           </div>
 
@@ -257,10 +303,9 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </>
+        </div>
       )}
-      </div>
       <Footer />
-    </>
+      </div>
   );
 }

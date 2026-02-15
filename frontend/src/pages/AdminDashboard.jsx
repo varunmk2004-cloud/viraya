@@ -20,16 +20,31 @@ export default function AdminDashboard() {
     category: '',
     price: 0,
     stock: 0,
+    minimumStock: 0,
     lowStockThreshold: 10,
     isRental: false,
     image: '',
     rental: { pricePerDay: 0, deposit: 0 }
   });
+  const [imagePreview, setImagePreview] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
   const { showToast } = useToast();
 
   useEffect(() => {
     loadData();
   }, []);
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (showProductModal || showUserModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showProductModal, showUserModal]);
 
   const loadData = async () => {
     setLoading(true);
@@ -43,7 +58,11 @@ export default function AdminDashboard() {
       setProducts(productsRes.data);
       setOrders(ordersRes.data);
     } catch (err) {
-      showToast('Failed to load dashboard data', 'error');
+      if (err.response?.status === 429) {
+        showToast('Too many requests. Please wait a moment and try again.', 'error');
+      } else {
+        showToast('Failed to load dashboard data', 'error');
+      }
     } finally {
       setLoading(false);
     }
@@ -67,11 +86,14 @@ export default function AdminDashboard() {
         category: '',
         price: 0,
         stock: 0,
+        minimumStock: 0,
         lowStockThreshold: 10,
         isRental: false,
         image: '',
         rental: { pricePerDay: 0, deposit: 0 }
       });
+      setImagePreview(null);
+      setImageFile(null);
       loadData();
     } catch (err) {
       showToast(err.response?.data?.message || 'Failed to save product', 'error');
@@ -80,20 +102,24 @@ export default function AdminDashboard() {
 
   const handleEditProduct = (product) => {
     setEditingProduct(product);
+    const productImage = product.image || (product.images && product.images[0]) || '';
     setProductForm({
       title: product.title || '',
       description: product.description || '',
       category: product.category || '',
       price: product.price || 0,
       stock: product.stock || 0,
+      minimumStock: product.minimumStock || 0,
       lowStockThreshold: product.lowStockThreshold || 10,
       isRental: product.isRental || false,
-      image: product.image || (product.images && product.images[0]) || '',
+      image: productImage,
       rental: {
         pricePerDay: product.rental?.pricePerDay || 0,
         deposit: product.rental?.deposit || 0
       }
     });
+    setImagePreview(productImage);
+    setImageFile(null);
     setShowProductModal(true);
   };
 
@@ -137,30 +163,74 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleImageFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        showToast('Please select an image file', 'error');
+        return;
+      }
+      
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        showToast('Image size should be less than 5MB', 'error');
+        return;
+      }
+
+      setImageFile(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result;
+        setImagePreview(base64String);
+        setProductForm({ ...productForm, image: base64String });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
+    setProductForm({ ...productForm, image: '' });
+    // Reset file input
+    const fileInput = document.getElementById('imageFileInput');
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  };
+
   if (loading) {
     return <Loading fullScreen />;
   }
 
-  const totalRevenue = orders.reduce((sum, o) => sum + (o.total || 0), 0);
-  const rentalProducts = products.filter((p) => p.isRental).length;
-  const purchaseProducts = products.length - rentalProducts;
+  // Safety checks for undefined arrays
+  const safeOrders = orders || [];
+  const safeProducts = products || [];
+  const safeUsers = users || [];
+
+  const totalRevenue = safeOrders.reduce((sum, o) => sum + (o.total || 0), 0);
+  const rentalProducts = safeProducts.filter((p) => p.isRental).length;
+  const purchaseProducts = safeProducts.length - rentalProducts;
 
   const stats = [
     {
       title: 'Total Users',
-      value: users.length,
+      value: safeUsers.length,
       icon: FiUsers,
       color: 'primary',
     },
     {
       title: 'Total Products',
-      value: products.length,
+      value: safeProducts.length,
       icon: FiPackage,
       color: 'success',
     },
     {
       title: 'Total Orders',
-      value: orders.length,
+      value: safeOrders.length,
       icon: FiShoppingBag,
       color: 'info',
     },
@@ -275,7 +345,7 @@ export default function AdminDashboard() {
                   </div>
                   <div className="d-flex justify-content-between">
                     <span className="text-muted">Pending Orders:</span>
-                    <span className="fw-semibold">{orders.filter(o => o.paymentStatus === 'pending').length}</span>
+                    <span className="fw-semibold">{safeOrders.filter(o => o.paymentStatus === 'pending').length}</span>
                   </div>
                 </div>
               </div>
@@ -286,7 +356,7 @@ export default function AdminDashboard() {
                   <h5 className="fw-bold mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>
                     Recent Orders
                   </h5>
-                  {orders.slice(0, 5).map((order) => (
+                  {safeOrders.slice(0, 5).map((order) => (
                     <div key={order._id} className="d-flex justify-content-between align-items-center mb-2 pb-2" style={{ borderBottom: '1px solid #f0f0f0' }}>
                       <div>
                         <div className="fw-semibold small">Order #{order._id.slice(-6)}</div>
@@ -300,7 +370,7 @@ export default function AdminDashboard() {
                       </div>
                     </div>
                   ))}
-                  {orders.length === 0 && (
+                  {safeOrders.length === 0 && (
                     <p className="text-muted text-center py-3">No orders yet</p>
                   )}
                 </div>
@@ -326,8 +396,11 @@ export default function AdminDashboard() {
                   stock: 0,
                   lowStockThreshold: 10,
                   isRental: false,
+                  image: '',
                   rental: { pricePerDay: 0, deposit: 0 }
                 });
+                setImagePreview(null);
+                setImageFile(null);
                 setShowProductModal(true);
               }}
             >
@@ -350,7 +423,7 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {products.map((p) => {
+                    {safeProducts.map((p) => {
                       const productImage = p.image || (p.images && p.images[0]) || null;
                       return (
                         <tr key={p._id}>
@@ -442,7 +515,7 @@ export default function AdminDashboard() {
                   </tbody>
                 </table>
               </div>
-              {products.length === 0 && (
+              {safeProducts.length === 0 && (
                 <p className="text-center text-muted py-5">No products found</p>
               )}
             </div>
@@ -467,7 +540,7 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {users.map((u) => (
+                    {safeUsers.map((u) => (
                       <tr key={u._id}>
                         <td className="fw-medium">{u.name}</td>
                         <td className="text-muted">{u.email}</td>
@@ -505,7 +578,7 @@ export default function AdminDashboard() {
                   </tbody>
                 </table>
               </div>
-              {users.length === 0 && (
+              {safeUsers.length === 0 && (
                 <p className="text-center text-muted py-5">No users found</p>
               )}
             </div>
@@ -531,7 +604,7 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {orders.map((order) => (
+                    {safeOrders.map((order) => (
                       <tr key={order._id}>
                         <td className="fw-medium">#{order._id.slice(-6)}</td>
                         <td>
@@ -573,13 +646,17 @@ export default function AdminDashboard() {
 
       {/* Product Modal */}
       {showProductModal && (
-        <div className="modal show" style={{ display: 'block' }}>
-          <div className="modal-backdrop show" onClick={() => {
-            setShowProductModal(false);
-            setEditingProduct(null);
-          }}></div>
-          <div className="modal-dialog modal-lg">
-            <div className="modal-content">
+        <div className="modal show" style={{ display: 'block', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1050 }}>
+          <div 
+            className="modal-backdrop show" 
+            onClick={() => {
+              setShowProductModal(false);
+              setEditingProduct(null);
+            }}
+            style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1040, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+          ></div>
+          <div className="modal-dialog modal-lg" style={{ position: 'relative', zIndex: 1055, margin: '1.75rem auto', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div className="modal-content" style={{ maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
               <div className="modal-header">
                 <h5 className="modal-title">{editingProduct ? 'Edit Product' : 'Add New Product'}</h5>
                 <button type="button" className="btn-close" onClick={() => {
@@ -587,8 +664,8 @@ export default function AdminDashboard() {
                   setEditingProduct(null);
                 }}>×</button>
               </div>
-              <form onSubmit={handleProductSubmit}>
-                <div className="modal-body">
+              <form onSubmit={handleProductSubmit} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+                <div className="modal-body" style={{ overflowY: 'auto', flex: 1 }}>
                   <div className="form-group mb-3">
                     <label className="form-label">Title *</label>
                     <input
@@ -609,24 +686,103 @@ export default function AdminDashboard() {
                     />
                   </div>
                   <div className="form-group mb-3">
-                    <label className="form-label">Image URL</label>
-                    <input
-                      type="url"
-                      className="form-control"
-                      value={productForm.image}
-                      onChange={(e) => setProductForm({ ...productForm, image: e.target.value })}
-                      placeholder="https://example.com/image.jpg"
-                    />
-                    {productForm.image && (
-                      <div className="mt-2">
-                        <img 
-                          src={productForm.image} 
-                          alt="Preview" 
-                          style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover', borderRadius: '0.5rem', border: '1px solid #dee2e6' }}
-                          onError={(e) => {
-                            e.target.style.display = 'none';
-                          }}
-                        />
+                    <label className="form-label">Product Image</label>
+                    
+                    {/* File Upload Option */}
+                    <div className="mb-3">
+                      <label className="form-label small text-muted">Upload Image File</label>
+                      <input
+                        id="imageFileInput"
+                        type="file"
+                        className="form-control"
+                        accept="image/*"
+                        onChange={handleImageFileChange}
+                      />
+                      <small className="text-muted">Supported formats: JPG, PNG, WebP (Max 5MB)</small>
+                    </div>
+
+                    {/* OR Divider */}
+                    <div className="d-flex align-items-center my-3">
+                      <div style={{ flex: 1, height: '1px', background: '#dee2e6' }}></div>
+                      <span className="mx-3 text-muted small">OR</span>
+                      <div style={{ flex: 1, height: '1px', background: '#dee2e6' }}></div>
+                    </div>
+
+                    {/* URL Input Option */}
+                    <div>
+                      <label className="form-label small text-muted">Enter Image URL</label>
+                      <input
+                        type="url"
+                        className="form-control"
+                        value={productForm.image && !imageFile ? productForm.image : ''}
+                        onChange={(e) => {
+                          setProductForm({ ...productForm, image: e.target.value });
+                          setImagePreview(e.target.value);
+                          setImageFile(null);
+                          // Reset file input
+                          const fileInput = document.getElementById('imageFileInput');
+                          if (fileInput) {
+                            fileInput.value = '';
+                          }
+                        }}
+                        placeholder="https://example.com/image.jpg or /images/image.jpg"
+                        disabled={!!imageFile}
+                      />
+                    </div>
+
+                    {/* Image Preview */}
+                    {(imagePreview || productForm.image) && (
+                      <div className="mt-3">
+                        <div className="d-flex align-items-center gap-3">
+                          <div style={{ position: 'relative' }}>
+                            <img 
+                              src={imagePreview || productForm.image} 
+                              alt="Preview" 
+                              style={{ 
+                                maxWidth: '200px', 
+                                maxHeight: '200px', 
+                                objectFit: 'cover', 
+                                borderRadius: '0.5rem', 
+                                border: '1px solid #dee2e6',
+                                display: 'block'
+                              }}
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                              }}
+                            />
+                            {(imagePreview || productForm.image) && (
+                              <button
+                                type="button"
+                                className="btn btn-sm btn-danger"
+                                onClick={handleRemoveImage}
+                                style={{
+                                  position: 'absolute',
+                                  top: '5px',
+                                  right: '5px',
+                                  borderRadius: '50%',
+                                  width: '30px',
+                                  height: '30px',
+                                  padding: 0,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center'
+                                }}
+                              >
+                                ×
+                              </button>
+                            )}
+                          </div>
+                          <div className="flex-grow-1">
+                            <small className="text-muted d-block">
+                              {imageFile ? `File: ${imageFile.name}` : 'Image URL'}
+                            </small>
+                            {imageFile && (
+                              <small className="text-muted d-block">
+                                Size: {(imageFile.size / 1024).toFixed(2)} KB
+                              </small>
+                            )}
+                          </div>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -676,7 +832,7 @@ export default function AdminDashboard() {
                           />
                         </div>
                       </div>
-                      <div className="col-md-6">
+                      <div className="col-md-4">
                         <div className="form-group mb-3">
                           <label className="form-label">Stock</label>
                           <input
@@ -688,7 +844,20 @@ export default function AdminDashboard() {
                           />
                         </div>
                       </div>
-                      <div className="col-md-6">
+                      <div className="col-md-4">
+                        <div className="form-group mb-3">
+                          <label className="form-label">Minimum Stock</label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            min="0"
+                            value={productForm.minimumStock}
+                            onChange={(e) => setProductForm({ ...productForm, minimumStock: parseInt(e.target.value) || 0 })}
+                          />
+                          <small className="text-muted">Absolute minimum to maintain</small>
+                        </div>
+                      </div>
+                      <div className="col-md-4">
                         <div className="form-group mb-3">
                           <label className="form-label">Low Stock Threshold</label>
                           <input
@@ -735,7 +904,7 @@ export default function AdminDashboard() {
                           />
                         </div>
                       </div>
-                      <div className="col-md-6">
+                      <div className="col-md-4">
                         <div className="form-group mb-3">
                           <label className="form-label">Stock</label>
                           <input
@@ -747,7 +916,20 @@ export default function AdminDashboard() {
                           />
                         </div>
                       </div>
-                      <div className="col-md-6">
+                      <div className="col-md-4">
+                        <div className="form-group mb-3">
+                          <label className="form-label">Minimum Stock</label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            min="0"
+                            value={productForm.minimumStock}
+                            onChange={(e) => setProductForm({ ...productForm, minimumStock: parseInt(e.target.value) || 0 })}
+                          />
+                          <small className="text-muted">Absolute minimum to maintain</small>
+                        </div>
+                      </div>
+                      <div className="col-md-4">
                         <div className="form-group mb-3">
                           <label className="form-label">Low Stock Threshold</label>
                           <input
@@ -782,13 +964,17 @@ export default function AdminDashboard() {
 
       {/* User Modal */}
       {showUserModal && (
-        <div className="modal show" style={{ display: 'block' }}>
-          <div className="modal-backdrop show" onClick={() => {
-            setShowUserModal(false);
-            setEditingUser(null);
-          }}></div>
-          <div className="modal-dialog">
-            <div className="modal-content">
+        <div className="modal show" style={{ display: 'block', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1050 }}>
+          <div 
+            className="modal-backdrop show" 
+            onClick={() => {
+              setShowUserModal(false);
+              setEditingUser(null);
+            }}
+            style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1040, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+          ></div>
+          <div className="modal-dialog" style={{ position: 'relative', zIndex: 1055, margin: '1.75rem auto', maxHeight: '90vh' }}>
+            <div className="modal-content" style={{ maxHeight: '90vh' }}>
               <div className="modal-header">
                 <h5 className="modal-title">Edit User Role</h5>
                 <button type="button" className="btn-close" onClick={() => {

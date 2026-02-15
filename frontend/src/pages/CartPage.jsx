@@ -128,12 +128,29 @@ export default function CartPage() {
                         >
                           {(i.product.image || (i.product.images && i.product.images[0])) ? (
                             <img
-                              src={i.product.image || (i.product.images && i.product.images[0])}
+                              src={(() => {
+                                const imgUrl = i.product.image || (i.product.images && i.product.images[0]);
+                                if (!imgUrl) return null;
+                                // Base64 data URL (from admin upload) - handle with or without leading slash
+                                if (imgUrl.startsWith('data:image/')) return imgUrl;
+                                if (imgUrl.startsWith('/data:image/')) return imgUrl.substring(1);
+                                // External URL
+                                if (imgUrl.startsWith('http://') || imgUrl.startsWith('https://')) return imgUrl;
+                                // Local path
+                                return imgUrl.startsWith('/') ? imgUrl : `/${imgUrl}`;
+                              })()}
                               alt={i.product.title}
                               className="w-100 h-100"
                               style={{ objectFit: 'cover' }}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = '';
+                                e.target.style.display = 'none';
+                              }}
+                              loading="lazy"
                             />
-                          ) : (
+                          ) : null}
+                          {(!i.product.image && (!i.product.images || i.product.images.length === 0)) && (
                             <div className="d-flex align-items-center justify-content-center h-100">
                               <span style={{ fontSize: '2rem' }}>📦</span>
                             </div>

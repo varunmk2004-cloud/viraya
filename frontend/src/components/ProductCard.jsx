@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiShoppingBag, FiCalendar } from 'react-icons/fi';
 
 export default function ProductCard({ p }) {
+  const [imageError, setImageError] = useState(false);
   const isRental = p.isRental || p.rental?.pricePerDay;
   const price = isRental 
     ? `₹${p.rental?.pricePerDay || 0}/day` 
@@ -11,20 +12,53 @@ export default function ProductCard({ p }) {
   const lowStockThreshold = p.lowStockThreshold || 10;
   const isLowStock = p.stock !== undefined && p.stock <= lowStockThreshold && p.stock > 0;
   const isOutOfStock = p.stock !== undefined && p.stock === 0;
+  
+  // Handle image URLs - supports base64, external URLs, and local paths
+  const getImageUrl = (url) => {
+    if (!url) return null;
+    // If it's a base64 data URL (from admin upload), use it as-is
+    // Also handle case where it might have a leading slash
+    if (url.startsWith('data:image/')) {
+      return url;
+    }
+    if (url.startsWith('/data:image/')) {
+      return url.substring(1); // Remove leading slash
+    }
+    // If it's already a full URL (http/https), use it as-is
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    }
+    // If it starts with /, it's a public folder path - Vite will serve it
+    if (url.startsWith('/')) {
+      return url;
+    }
+    // Otherwise, assume it's a public folder path
+    return `/${url}`;
+  };
+  
+  const imageUrl = getImageUrl(p.image || (p.images && p.images[0]));
 
   return (
     <Link to={`/product/${p._id}`} className="text-decoration-none" style={{ color: 'inherit' }}>
       <div className="card h-100 shadow-sm">
-        <div className="position-relative" style={{ height: '200px', overflow: 'hidden', background: 'linear-gradient(135deg, #f5f1e8, #e8e0d1)' }}>
-          {(p.image || (p.images && p.images[0])) ? (
+        <div className="position-relative" style={{ height: '200px', minHeight: '200px', overflow: 'hidden', background: 'linear-gradient(135deg, #f5f1e8, #e8e0d1)' }}>
+          {imageUrl ? (
             <img
-              src={p.image || (p.images && p.images[0])}
+              src={imageUrl}
               alt={p.title}
-              style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s' }}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s', display: imageError ? 'none' : 'block' }}
               className="card-img-hover"
+              onError={(e) => {
+                setImageError(true);
+              }}
+              onLoad={() => {
+                setImageError(false);
+              }}
+              loading="lazy"
             />
-          ) : (
-            <div className="d-flex align-items-center justify-content-center h-100">
+          ) : null}
+          {(!imageUrl || imageError) && (
+            <div className="d-flex align-items-center justify-content-center h-100" style={{ position: imageUrl ? 'absolute' : 'relative', top: 0, left: 0, right: 0, bottom: 0 }}>
               <div style={{ fontSize: '3rem', color: '#94a3b8' }}>
                 {isRental ? <FiCalendar /> : <FiShoppingBag />}
               </div>

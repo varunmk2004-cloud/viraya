@@ -34,6 +34,13 @@ instance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // Handle 429 (Too Many Requests) - don't retry, just reject
+    if (error.response?.status === 429) {
+      const retryAfter = error.response.headers['retry-after'] || 60;
+      console.error(`Rate limit exceeded. Please wait ${retryAfter} seconds before trying again.`);
+      return Promise.reject(error);
+    }
+
     // If error is 401 and we haven't tried to refresh yet
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {

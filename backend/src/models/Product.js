@@ -8,6 +8,7 @@ const productSchema = new mongoose.Schema({
   category: String,
   price: { type: Number, default: 0 },
   stock: { type: Number, default: 0 },
+  minimumStock: { type: Number, default: 0 },
   lowStockThreshold: { type: Number, default: 10 },
   isRental: { type: Boolean, default: false },
   rental: {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { FiCheckCircle, FiXCircle, FiInfo, FiAlertCircle } from 'react-icons/fi';
 
 const ToastContext = React.createContext();
@@ -6,14 +6,14 @@ const ToastContext = React.createContext();
 export function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([]);
 
-  const showToast = (message, type = 'info') => {
+  const showToast = useCallback((message, type = 'info') => {
     const id = Date.now();
     const toast = { id, message, type };
     setToasts((prev) => [...prev, toast]);
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
     }, 3000);
-  };
+  }, []);
 
   const removeToast = (id) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));

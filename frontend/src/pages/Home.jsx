@@ -16,15 +16,24 @@ export default function Home() {
 
   useEffect(() => {
     setLoading(true);
+    const abortController = new AbortController();
+    
     axios
-      .get('/products')
+      .get('/products', { signal: abortController.signal })
       .then((r) => {
         setProducts(r.data);
         setLoading(false);
       })
-      .catch(() => {
+      .catch((err) => {
+        if (err.name === 'AbortError' || err.code === 'ERR_CANCELED') {
+          return; // Request was cancelled, ignore
+        }
         setLoading(false);
       });
+    
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   const filteredProducts = products.filter((product) => {
@@ -160,11 +169,10 @@ export default function Home() {
  
       <div className="mb-4 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
         <div className="row g-3" style={{ marginLeft: 0, marginRight: 0, alignItems: 'center' }}>
-          <div className="col-md-8" style={{ paddingLeft: '0.75rem', paddingRight: '0.75rem' }}>
+          <div className="col-12 col-md-8" style={{ paddingLeft: '0.75rem', paddingRight: '0.75rem' }}>
             <div className="position-relative">
               <FiSearch
-                className="position-absolute translate-middle-y"
-                className="text-primary"
+                className="position-absolute translate-middle-y text-primary"
                 style={{ left: '0.75rem', top: '50%', zIndex: 1 }}
               />
               <input
@@ -177,7 +185,8 @@ export default function Home() {
                   paddingBottom: '0.875rem',
                   border: '1px solid #e8e0d1', 
                   fontSize: '1rem',
-                  height: '48px'
+                  height: '48px',
+                  width: '100%'
                 }}
                 placeholder="Search premium products..."
                 value={searchTerm}
@@ -185,7 +194,7 @@ export default function Home() {
               />
             </div>
           </div>
-          <div className="col-md-4" style={{ paddingLeft: '0.75rem', paddingRight: '0.75rem' }}>
+          <div className="col-12 col-md-4" style={{ paddingLeft: '0.75rem', paddingRight: '0.75rem' }}>
             <div className="d-flex w-100" style={{ gap: 0, height: '48px' }}>
               <button
                 className={`btn ${filterType === 'all' ? 'btn-primary' : 'btn-outline-primary'} text-uppercase`}

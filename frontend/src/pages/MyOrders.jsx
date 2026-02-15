@@ -97,12 +97,23 @@ export default function MyOrders() {
                         {order.items?.map((item, idx) => {
                           const product = item.product;
                           const productImage = product?.image || (product?.images && product?.images[0]) || null;
+                          // Handle image URL - supports base64, external URLs, and local paths
+                          const getImageUrl = (url) => {
+                            if (!url) return null;
+                            // Base64 data URL (from admin upload) - handle with or without leading slash
+                            if (url.startsWith('data:image/')) return url;
+                            if (url.startsWith('/data:image/')) return url.substring(1);
+                            // External URL
+                            if (url.startsWith('http://') || url.startsWith('https://')) return url;
+                            // Local path
+                            return url.startsWith('/') ? url : `/${url}`;
+                          };
                           return (
                             <div key={idx} className="col-12">
                               <div className="d-flex align-items-center gap-3">
                                 {productImage ? (
                                   <img
-                                    src={productImage}
+                                    src={getImageUrl(productImage)}
                                     alt={product?.title}
                                     style={{
                                       width: '80px',
@@ -110,6 +121,9 @@ export default function MyOrders() {
                                       objectFit: 'cover',
                                       borderRadius: '0.5rem',
                                       border: '1px solid #dee2e6'
+                                    }}
+                                    onError={(e) => {
+                                      e.target.style.display = 'none';
                                     }}
                                   />
                                 ) : (

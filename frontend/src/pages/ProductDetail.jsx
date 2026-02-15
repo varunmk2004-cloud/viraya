@@ -4,7 +4,7 @@ import axios from '../api/axios';
 import { AuthContext } from '../context/AuthContext';
 import { useToast } from '../components/Toast';
 import Loading from '../components/Loading';
-import { FiShoppingCart, FiCalendar, FiArrowLeft } from 'react-icons/fi';
+import { FiShoppingCart, FiCalendar, FiArrowLeft, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import Footer from '../components/Footer';
 
 export default function ProductDetail() {
@@ -12,6 +12,8 @@ export default function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [addingToCart, setAddingToCart] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [imageError, setImageError] = useState(false);
   
   // Rental availability state
   const [dates, setDates] = useState({ start: '', end: '' });
@@ -23,33 +25,97 @@ export default function ProductDetail() {
   const { showToast } = useToast();
 
   useEffect(() => {
+    if (!id) return;
     setLoading(true);
+    setProduct(null);
+    
+    const abortController = new AbortController();
+    
     axios
-      .get(`/products/${id}`)
+      .get(`/products/${id}`, { signal: abortController.signal })
       .then((r) => {
         setProduct(r.data);
         setLoading(false);
       })
-      .catch(() => {
+      .catch((err) => {
+        if (err.name === 'AbortError' || err.code === 'ERR_CANCELED') {
+          return; // Request was cancelled, ignore
+        }
+        console.error('Error loading product:', err);
         setLoading(false);
-        showToast('Failed to load product', 'error');
+        setProduct(null);
+        if (err.response?.status === 429) {
+          showToast('Too many requests. Please wait a moment and try again.', 'error');
+        } else {
+          showToast('Failed to load product', 'error');
+        }
       });
+    
+    return () => {
+      abortController.abort();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {
-    if (dates.start && dates.end && new Date(dates.start) < new Date(dates.end)) {
+    if (product) {
+      setImageError(false);
+      setSelectedImageIndex(0);
+    }
+  }, [product]);
+
+  // Debounced availability check to prevent too many API calls
+  useEffect(() => {
+    if (!dates.start || !dates.end || new Date(dates.start) >= new Date(dates.end)) {
+      setAvailability(null);
+      return;
+    }
+
+    let abortController = null;
+    
+    // Debounce the API call by 500ms
+    const timeoutId = setTimeout(() => {
       setCheckingAvailability(true);
-      axios.get(`/products/${id}/availability?start=${dates.start}&end=${dates.end}`)
+      abortController = new AbortController();
+      
+      axios.get(`/products/${id}/availability?start=${dates.start}&end=${dates.end}`, {
+        signal: abortController.signal
+      })
         .then(res => setAvailability(res.data))
         .catch(err => {
-          console.error(err);
+          if (err.name === 'AbortError' || err.code === 'ERR_CANCELED') {
+            return; // Request was cancelled, ignore
+          }
+          if (err.response?.status === 429) {
+            showToast('Too many requests. Please wait a moment.', 'warning');
+          }
           setAvailability(null);
         })
         .finally(() => setCheckingAvailability(false));
-    } else {
-      setAvailability(null);
+    }, 500);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (abortController) {
+        abortController.abort();
+      }
+    };
+  }, [dates.start, dates.end, id, showToast]);
+
+  // Reset image error when selected image index changes
+  useEffect(() => {
+    if (product) {
+      const allImages = product.images && product.images.length > 0 
+        ? product.images 
+        : product.image 
+          ? [product.image] 
+          : [];
+      const currentImage = allImages[selectedImageIndex] || product.image || '';
+      if (currentImage) {
+        setImageError(false);
+      }
     }
-  }, [dates.start, dates.end, id]);
+  }, [selectedImageIndex, product]);
 
   const addToCart = async () => {
     if (!user) {
@@ -81,7 +147,7 @@ export default function ProductDetail() {
 
   if (!product) {
     return (
-      <div className="container text-center py-5">
+      <div className="container text-center py-5" style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         <div className="alert alert-info">Product not found</div>
         <button onClick={() => nav('/')} className="btn btn-primary mt-3">
           Go Home
@@ -90,24 +156,78 @@ export default function ProductDetail() {
     );
   }
 
-  const isRental = product.isRental || product.rental?.pricePerDay;
+  if (!id) {
+    return (
+      <div className="container text-center py-5">
+        <div className="alert alert-warning">Invalid product ID</div>
+        <button onClick={() => nav('/')} className="btn btn-primary mt-3">
+          Go Home
+        </button>
+      </div>
+    );
+  }
+
+  const isRental = product?.isRental || product?.rental?.pricePerDay;
   const price = isRental
-    ? `₹${product.rental?.pricePerDay || 0}/day`
-    : `₹${product.price || 0}`;
+    ? `₹${product?.rental?.pricePerDay || 0}/day`
+    : `₹${product?.price || 0}`;
   
-  const lowStockThreshold = product.lowStockThreshold || 10;
-  const isLowStock = product.stock !== undefined && product.stock <= lowStockThreshold && product.stock > 0;
-  const isOutOfStock = product.stock !== undefined && product.stock === 0;
+  const lowStockThreshold = product?.lowStockThreshold || 10;
+  const isLowStock = product?.stock !== undefined && product.stock <= lowStockThreshold && product.stock > 0;
+  const isOutOfStock = product?.stock !== undefined && product.stock === 0;
+  
+  // Handle image URLs - supports base64, external URLs, and local paths
+  const getImageUrl = (url) => {
+    if (!url) return null;
+    // If it's a base64 data URL (from admin upload), use it as-is
+    // Also handle case where it might have a leading slash
+    if (url.startsWith('data:image/')) {
+      return url;
+    }
+    if (url.startsWith('/data:image/')) {
+      return url.substring(1); // Remove leading slash
+    }
+    // If it's already a full URL (http/https), use it as-is
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    }
+    // If it starts with /, it's a public folder path - Vite will serve it
+    if (url.startsWith('/')) {
+      return url;
+    }
+    // Otherwise, assume it's a public folder path
+    return `/${url}`;
+  };
+  
+  const allImages = product?.images && product.images.length > 0 
+    ? product.images.map(getImageUrl).filter(Boolean)
+    : product?.image 
+      ? [getImageUrl(product.image)].filter(Boolean)
+      : [];
+  
+  const currentImage = allImages[selectedImageIndex] || getImageUrl(product?.image) || '';
+
+  const nextImage = () => {
+    if (allImages.length > 0) {
+      setSelectedImageIndex((prev) => (prev + 1) % allImages.length);
+    }
+  };
+
+  const prevImage = () => {
+    if (allImages.length > 0) {
+      setSelectedImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
+    }
+  };
 
   return (
-    <>
-      <div className="container">
+    <div style={{ minHeight: '100vh', paddingTop: '2rem', paddingBottom: '2rem' }}>
+      <div className="container" style={{ paddingLeft: '15px', paddingRight: '15px' }}>
         <button onClick={() => nav(-1)} className="btn btn-link mb-4" style={{ padding: 0, textDecoration: 'none' }}>
           <FiArrowLeft style={{ marginRight: '0.5rem' }} /> Back
         </button>
 
-        <div className="row" style={{ marginLeft: 0, marginRight: 0 }}>
-          <div className="col-12 col-md-6 mb-4 mb-md-0" style={{ paddingLeft: '0.75rem', paddingRight: '0.75rem' }}>
+        <div className="row g-4">
+          <div className="col-12 col-md-6">
             <div className="card shadow-sm">
               <div
                 className="position-relative"
@@ -115,24 +235,119 @@ export default function ProductDetail() {
                   aspectRatio: '1',
                   background: 'linear-gradient(135deg, #f5f1e8, #e8e0d1)',
                   overflow: 'hidden',
+                  minHeight: '300px'
                 }}
               >
-                {(product.image || (product.images && product.images[0])) ? (
-                  <img
-                    src={product.image || (product.images && product.images[0])}
-                    alt={product.title}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
-                ) : (
-                  <div className="d-flex align-items-center justify-content-center h-100">
+                {currentImage ? (
+                  <>
+                    <img
+                      src={currentImage}
+                      alt={product.title}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: imageError ? 'none' : 'block' }}
+                      onError={(e) => {
+                        setImageError(true);
+                        e.target.style.display = 'none';
+                      }}
+                      onLoad={() => {
+                        setImageError(false);
+                      }}
+                      loading="lazy"
+                    />
+                    {allImages.length > 1 && (
+                      <>
+                        <button
+                          onClick={(e) => { e.preventDefault(); prevImage(); }}
+                          className="position-absolute"
+                          style={{
+                            top: '50%',
+                            left: '10px',
+                            transform: 'translateY(-50%)',
+                            background: 'rgba(255, 255, 255, 0.9)',
+                            border: 'none',
+                            borderRadius: '50%',
+                            width: '40px',
+                            height: '40px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            zIndex: 2,
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                          }}
+                        >
+                          <FiChevronLeft size={20} />
+                        </button>
+                        <button
+                          onClick={(e) => { e.preventDefault(); nextImage(); }}
+                          className="position-absolute"
+                          style={{
+                            top: '50%',
+                            right: '10px',
+                            transform: 'translateY(-50%)',
+                            background: 'rgba(255, 255, 255, 0.9)',
+                            border: 'none',
+                            borderRadius: '50%',
+                            width: '40px',
+                            height: '40px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            zIndex: 2,
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                          }}
+                        >
+                          <FiChevronRight size={20} />
+                        </button>
+                        <div className="position-absolute bottom-0 start-50 translate-middle-x mb-2">
+                          <span className="badge bg-dark bg-opacity-75">
+                            {selectedImageIndex + 1} / {allImages.length}
+                          </span>
+                        </div>
+                      </>
+                    )}
+                  </>
+                ) : null}
+                {(!currentImage || imageError) && (
+                  <div className="d-flex align-items-center justify-content-center h-100" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
                     <span style={{ fontSize: '4rem' }}>📦</span>
                   </div>
                 )}
               </div>
             </div>
+            
+            {/* Thumbnail Gallery */}
+            {allImages.length > 1 && (
+              <div className="d-flex gap-2 mt-3" style={{ overflowX: 'auto', paddingBottom: '10px' }}>
+                {allImages.map((img, idx) => (
+                  <div
+                    key={idx}
+                    onClick={() => setSelectedImageIndex(idx)}
+                    className="rounded"
+                    style={{
+                      width: '80px',
+                      height: '80px',
+                      minWidth: '80px',
+                      overflow: 'hidden',
+                      cursor: 'pointer',
+                      border: selectedImageIndex === idx ? '3px solid #4169E1' : '2px solid #dee2e6',
+                      opacity: selectedImageIndex === idx ? 1 : 0.7,
+                      transition: 'all 0.3s'
+                    }}
+                  >
+                    <img
+                      src={img}
+                      alt={`${product.title} ${idx + 1}`}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          <div className="col-12 col-md-6" style={{ paddingLeft: '0.75rem', paddingRight: '0.75rem' }}>
+          <div className="col-12 col-md-6">
             <div>
               {isRental && (
                 <span className="badge bg-primary mb-3">Rental Available</span>
@@ -283,6 +498,6 @@ export default function ProductDetail() {
         </div>
       </div>
       <Footer />
-    </>
+    </div>
   );
 }
